@@ -132,3 +132,33 @@ if selected_meals:
 
 # Footer
 st.write("### Stay healthy and enjoy your meals! 🌟")
+
+
+# Function to create a pie chart
+def plot_pie_chart(data, labels, title):
+    fig, ax = plt.subplots()
+    ax.pie(data, labels=labels, autopct='%1.1f%%', startangle=140)
+    ax.set_title(title)
+    return fig
+
+# Nutritional breakdown sample data
+selected_data = pd.DataFrame({
+    "Nutrient": ["Calories", "Protein (g)", "Total Fat (g)"],
+    "Value": [480, 18, 10]
+})
+
+# Display total calories
+total_calories = selected_data[selected_data["Nutrient"] == "Calories"]["Value"].iloc[0]
+st.metric("Total Calories", f"{total_calories} kcal")
+
+# Pie Chart for Nutritional Breakdown
+st.subheader("Nutritional Breakdown")
+pie_chart = plot_pie_chart(
+    data=selected_data["Value"],
+    labels=selected_data["Nutrient"],
+    title="Nutritional Distribution"
+)
+st.pyplot(pie_chart)
+
+# Footer
+st.write("### Stay healthy and enjoy your meals! 🌟")
