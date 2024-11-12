@@ -2,138 +2,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Data for Breakfast, Lunch, and Dinner Menus
-breakfast_data = {
-    "Meal": [
-        "Bacon, Egg And Cheese Muffin", "Fried Egg O’muffin Sandwich", "Scrambled Eggs", 
-        "Bacon", "Fried Tater Tots", "Buttermilk Pancakes", "Everything Omelet", 
-        "Grits", "Oatmeal", "Mango Banana Smoothie", "Strawberry Banana Smoothie", 
-        "Pineapple & Honey Smoothie", "Mango Pineapple Smoothie", 
-        "Brown Sugar Cinnamon Mini Scone", "Strawberry Shortcake Muffins", 
-        "Scrambled Tofu", "Lyonnaise Potatoes", "Roasted Red Beets"
-    ],
-    "Calories": [350, 310, 190, 70, 250, 180, 290, 90, 110, 100, 100, 190, 110, 200, 130, 60, 45, 25],
-    "Total Fat (g)": [12, 10, 5, 6, 15, 9, 11, 0.5, 1, 0.5, 0.3, 1.5, 0.3, 10, 8, 3, 1, 0.2],
-    "Protein (g)": [15, 13, 12, 5, 2, 4, 10, 2, 3, 1, 2, 4, 1, 3, 4, 2, 1, 1],
-}
-
-lunch_data = {
-    "Meal": [
-        "Grilled Garlic Chicken", "Black Bean Burger", "Cheeseburger On Bun", 
-        "French Fries", "Bbq Pork Riblet Sandwich", "Beef Bulgogi Rice Bowl", 
-        "Cheese Pizza", "Vegetable Lovers Feast Pizza", "Pepperoni Pizza", 
-        "Creamy Broccoli & Cheddar Soup", "Cilantro Cucumber Salad", 
-        "Tabbouleh With Garbanzo Beans", "Salsa", "Cilantro Lime Brown Rice", 
-        "Baja Roasted Vegetables"
-    ],
-    "Calories": [150, 240, 200, 150, 380, 470, 250, 290, 250, 200, 70, 110, 10, 120, 50],
-    "Total Fat (g)": [2, 6, 10, 5, 15, 20, 8, 12, 10, 9, 1, 3, 0.2, 1, 0.5],
-    "Protein (g)": [30, 10, 12, 2, 15, 35, 10, 8, 10, 6, 1, 3, 0.5, 2, 1],
-}
-
-dinner_data = {
-    "Meal": [
-        "Tomato, Bacon & Cheddar Baguette", "Beef Bulgogi Rice Bowl", 
-        "Vegetable Lovers Feast Pizza", "Pepperoni Pizza", "Gluten-Free Penne", 
-        "Simply Sauteed Broccoli Rabe", "Chili Con Carne", "Extra Firm Tofu", 
-        "Baked Garlic Breadstick", "Latin Chipotle Quinoa Salad"
-    ],
-    "Calories": [540, 470, 290, 250, 170, 25, 190, 60, 90, 130],
-    "Total Fat (g)": [20, 18, 12, 10, 5, 0.5, 7, 2, 3, 1],
-    "Protein (g)": [25, 35, 10, 15, 6, 1, 15, 6, 2, 4],
-}
-
-# Convert data to DataFrames
-breakfast_df = pd.DataFrame(breakfast_data)
-lunch_df = pd.DataFrame(lunch_data)
-dinner_df = pd.DataFrame(dinner_data)
-
-# Function to calculate daily caloric needs (Mifflin-St Jeor Equation)
-def calculate_calories(weight, height, age, gender, activity_level):
-    if gender == "Male":
-        bmr = 10 * weight + 6.25 * height - 5 * age + 5
-    else:
-        bmr = 10 * weight + 6.25 * height - 5 * age - 161
-
-    activity_multipliers = {
-        "Sedentary": 1.2,
-        "Lightly Active": 1.375,
-        "Moderately Active": 1.55,
-        "Very Active": 1.725
-    }
-    return bmr * activity_multipliers[activity_level]
-
-# App Title
-st.title("Personalized Nutrition and Meal Planning 🍴")
-
-# Sidebar for Personal Information
-st.sidebar.header("Personal Information")
-weight = st.sidebar.number_input("Weight (kg)", min_value=30, max_value=200, value=70)
-height = st.sidebar.number_input("Height (cm)", min_value=100, max_value=250, value=170)
-age = st.sidebar.number_input("Age (years)", min_value=10, max_value=100, value=25)
-gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
-activity_level = st.sidebar.selectbox("Activity Level", ["Sedentary", "Lightly Active", "Moderately Active", "Very Active"])
-
-# Calculate daily caloric needs
-daily_caloric_needs = calculate_calories(weight, height, age, gender, activity_level)
-st.sidebar.metric("Recommended Daily Calories", f"{int(daily_caloric_needs)} kcal")
-
-# Meal Type Selection
-st.sidebar.header("Choose a Meal Type")
-meal_type = st.sidebar.selectbox("Select a Meal", ["Breakfast", "Lunch", "Dinner"])
-
-# Select appropriate menu based on meal type
-if meal_type == "Breakfast":
-    menu_df = breakfast_df
-elif meal_type == "Lunch":
-    menu_df = lunch_df
-else:
-    menu_df = dinner_df
-
-# Sidebar for Filtering
-st.sidebar.header("Filter Your Options")
-dietary_preference = st.sidebar.selectbox("Select a Dietary Option", ["All", "Vegan", "Vegetarian"])
-calorie_limit = st.sidebar.slider("Set a Calorie Limit (per meal)", 50, 600, 300)
-
-# Filter meals based on preferences
-if dietary_preference != "All":
-    filtered_menu = menu_df[(menu_df["Calories"] <= calorie_limit)]
-else:
-    filtered_menu = menu_df[menu_df["Calories"] <= calorie_limit]
-
-# Display Menu
-st.subheader(f"{meal_type} Menu")
-st.dataframe(filtered_menu)
-
-# Meal Planning and Recommendations
-selected_meals = st.multiselect("Select meals to add to your plan:", options=filtered_menu["Meal"].tolist())
-if selected_meals:
-    selected_data = filtered_menu[filtered_menu["Meal"].isin(selected_meals)]
-    total_calories = selected_data["Calories"].sum()
-
-    # Display selected meals and summary
-    st.write("### Selected Meals")
-    st.table(selected_data)
-
-    st.write("### Summary")
-    st.metric("Total Calories", f"{total_calories} kcal")
-
-    # Recommendations
-    if total_calories > daily_caloric_needs:
-        st.error("Your meal plan exceeds your daily caloric needs.")
-    elif total_calories < daily_caloric_needs * 0.8:
-        st.warning("Your meal plan is too low in calories.")
-    else:
-        st.success("Your meal plan is within your recommended caloric range.")
-
-    # Nutritional Breakdown
-    st.write("### Nutritional Breakdown")
-    st.bar_chart(selected_data[["Calories", "Total Fat (g)", "Protein (g)"]])
-
-# Footer
-st.write("### Stay healthy and enjoy your meals! 🌟")
-
-
 # Function to create a pie chart
 def plot_pie_chart(data, labels, title):
     fig, ax = plt.subplots()
@@ -141,24 +9,127 @@ def plot_pie_chart(data, labels, title):
     ax.set_title(title)
     return fig
 
-# Nutritional breakdown sample data
-selected_data = pd.DataFrame({
-    "Nutrient": ["Calories", "Protein (g)", "Total Fat (g)"],
-    "Value": [480, 18, 10]
-})
+# Function to calculate totals based on portions
+def calculate_totals(selected_data, portions):
+    selected_data = selected_data.copy()
+    selected_data["Portions"] = portions
+    for column in ["Calories", "Total Fat (g)", "Protein (g)"]:
+        selected_data[column] *= selected_data["Portions"]
+    return selected_data, selected_data[["Calories", "Total Fat (g)", "Protein (g)"]].sum()
 
-# Display total calories
-total_calories = selected_data[selected_data["Nutrient"] == "Calories"]["Value"].iloc[0]
-st.metric("Total Calories", f"{total_calories} kcal")
+# Additional features: Meal Recommendations and Nutritional Insights
+def provide_recommendations(total_calories, daily_needs):
+    if total_calories > daily_needs:
+        return "Your meal plan exceeds your daily caloric needs. Consider reducing portion sizes or choosing lower-calorie options."
+    elif total_calories < daily_needs * 0.8:
+        return "Your meal plan is too low in calories. Add more nutritious options to meet your energy requirements."
+    else:
+        return "Your meal plan is within the recommended caloric range. Keep it up!"
 
-# Pie Chart for Nutritional Breakdown
-st.subheader("Nutritional Breakdown")
-pie_chart = plot_pie_chart(
-    data=selected_data["Value"],
-    labels=selected_data["Nutrient"],
-    title="Nutritional Distribution"
+# Function to display daily nutritional goals comparison
+def plot_goals_comparison(totals, daily_goals):
+    fig, ax = plt.subplots()
+    nutrients = totals.index.tolist()
+    values = totals.values
+    goals = [daily_goals.get(nutrient, 0) for nutrient in nutrients]
+    ax.bar(nutrients, values, label="Your Intake", alpha=0.7)
+    ax.bar(nutrients, goals, label="Recommended Goals", alpha=0.5)
+    ax.set_title("Comparison of Intake vs Goals")
+    ax.set_ylabel("Amount")
+    ax.legend()
+    return fig
+
+# Sample Data for Monday and Tuesday Menus
+menus = {
+    "Monday": {
+        "Breakfast": pd.DataFrame([
+            {"Meal": "Bacon, Egg And Cheese Muffin", "Calories": 350, "Total Fat (g)": 12, "Protein (g)": 15},
+            {"Meal": "Fried Egg O’muffin Sandwich", "Calories": 310, "Total Fat (g)": 10, "Protein (g)": 13},
+            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12},
+        ]),
+        "Lunch": pd.DataFrame([
+            {"Meal": "Beef Bulgogi Rice Bowl", "Calories": 470, "Total Fat (g)": 20, "Protein (g)": 35},
+            {"Meal": "Cheese Pizza", "Calories": 250, "Total Fat (g)": 8, "Protein (g)": 10},
+        ]),
+        "Dinner": pd.DataFrame([
+            {"Meal": "Pepperoni Pizza", "Calories": 250, "Total Fat (g)": 10, "Protein (g)": 10},
+            {"Meal": "Grilled Garlic Chicken", "Calories": 150, "Total Fat (g)": 2, "Protein (g)": 30},
+        ]),
+    },
+    "Tuesday": {
+        "Breakfast": pd.DataFrame([
+            {"Meal": "Egg & Cheese Bagel With Sausage", "Calories": 500, "Total Fat (g)": 18, "Protein (g)": 20},
+            {"Meal": "Scrambled Egg & Cheese On Bagel", "Calories": 300, "Total Fat (g)": 10, "Protein (g)": 15},
+            {"Meal": "French Waffle", "Calories": 180, "Total Fat (g)": 7, "Protein (g)": 5},
+        ]),
+        "Lunch": pd.DataFrame([
+            {"Meal": "Steamed Italian Vegetable Medley", "Calories": 45, "Total Fat (g)": 0.5, "Protein (g)": 1},
+            {"Meal": "Rosemary Grilled Pork Chop", "Calories": 300, "Total Fat (g)": 10, "Protein (g)": 30},
+        ]),
+        "Dinner": pd.DataFrame([
+            {"Meal": "Tuna Cheddar Melt", "Calories": 520, "Total Fat (g)": 18, "Protein (g)": 25},
+            {"Meal": "Simply Grilled Fresh Cod", "Calories": 150, "Total Fat (g)": 2, "Protein (g)": 30},
+        ]),
+    },
+}
+
+# Sidebar to select day and meal type
+st.sidebar.header("Select Day and Meal")
+selected_day = st.sidebar.selectbox("Select a Day:", list(menus.keys()))
+selected_meal_type = st.sidebar.selectbox("Select a Meal Type:", ["Breakfast", "Lunch", "Dinner"])
+
+# Retrieve menu for selected day and meal type
+menu_df = menus[selected_day][selected_meal_type]
+
+# Display menu
+st.subheader(f"{selected_day} {selected_meal_type} Menu")
+st.dataframe(menu_df)
+
+# Allow users to select meals and portions
+selected_meals = st.multiselect(
+    "Select meals to add to your plan:",
+    options=menu_df["Meal"].tolist()
 )
-st.pyplot(pie_chart)
+
+if selected_meals:
+    selected_data = menu_df[menu_df["Meal"].isin(selected_meals)]
+    st.write("### Selected Meals")
+
+    # Input portions for selected meals
+    portions = []
+    for meal in selected_meals:
+        portions.append(st.number_input(f"Portions of {meal}:", min_value=1, max_value=10, value=1))
+
+    # Calculate totals
+    selected_data, totals = calculate_totals(selected_data, portions)
+
+    # Display selected meals with portions
+    st.table(selected_data)
+
+    # Display summary
+    st.write("### Summary")
+    st.metric("Total Calories", f"{totals['Calories']} kcal")
+    st.metric("Total Fat", f"{totals['Total Fat (g)']} g")
+    st.metric("Total Protein", f"{totals['Protein (g)']} g")
+
+    # Nutritional Breakdown Pie Chart
+    st.subheader("Nutritional Breakdown")
+    pie_chart = plot_pie_chart(
+        data=totals.values,
+        labels=totals.index,
+        title="Nutritional Distribution"
+    )
+    st.pyplot(pie_chart)
+
+    # Recommendations
+    daily_caloric_needs = 2000  # Example value for demonstration
+    st.write(provide_recommendations(totals["Calories"], daily_caloric_needs))
+
+    # Daily Goals Comparison
+    daily_goals = {"Calories": 2000, "Total Fat (g)": 70, "Protein (g)": 50}  # Example goals
+    st.subheader("Comparison with Recommended Daily Goals")
+    comparison_chart = plot_goals_comparison(totals, daily_goals)
+    st.pyplot(comparison_chart)
 
 # Footer
 st.write("### Stay healthy and enjoy your meals! 🌟")
