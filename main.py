@@ -13,13 +13,8 @@ breakfast_data = {
         "Scrambled Tofu", "Lyonnaise Potatoes", "Roasted Red Beets"
     ],
     "Calories": [350, 310, 190, 70, 250, 180, 290, 90, 110, 100, 100, 190, 110, 200, 130, 60, 45, 25],
-    "Dietary Options": [
-        "Contains Dairy, Egg, Vegetarian", "Contains Dairy, Egg, Vegetarian", "Contains Egg, Vegetarian",
-        "Contains Meat", "Vegan", "Contains Dairy, Egg, Vegetarian", "Contains Dairy, Egg, Vegetarian",
-        "Vegan", "Vegan", "Vegan", "Contains Dairy", "Vegetarian", "Contains Dairy",
-        "Contains Dairy, Egg, Vegetarian", "Contains Dairy, Egg, Vegetarian",
-        "Vegan", "Vegan", "Vegan"
-    ]
+    "Total Fat (g)": [12, 10, 5, 6, 15, 9, 11, 0.5, 1, 0.5, 0.3, 1.5, 0.3, 10, 8, 3, 1, 0.2],
+    "Protein (g)": [15, 13, 12, 5, 2, 4, 10, 2, 3, 1, 2, 4, 1, 3, 4, 2, 1, 1],
 }
 
 lunch_data = {
@@ -32,12 +27,8 @@ lunch_data = {
         "Baja Roasted Vegetables"
     ],
     "Calories": [150, 240, 200, 150, 380, 470, 250, 290, 250, 200, 70, 110, 10, 120, 50],
-    "Dietary Options": [
-        "Contains Meat", "Vegan", "Contains Dairy, Gluten", "Vegan", "Contains Meat, Gluten", 
-        "Contains Meat, Gluten", "Contains Dairy, Vegetarian", "Contains Dairy, Vegetarian", 
-        "Contains Dairy, Meat", "Contains Dairy, Vegetarian", "Vegan", "Vegan", "Vegan", 
-        "Vegan", "Vegan"
-    ]
+    "Total Fat (g)": [2, 6, 10, 5, 15, 20, 8, 12, 10, 9, 1, 3, 0.2, 1, 0.5],
+    "Protein (g)": [30, 10, 12, 2, 15, 35, 10, 8, 10, 6, 1, 3, 0.5, 2, 1],
 }
 
 dinner_data = {
@@ -48,12 +39,8 @@ dinner_data = {
         "Baked Garlic Breadstick", "Latin Chipotle Quinoa Salad"
     ],
     "Calories": [540, 470, 290, 250, 170, 25, 190, 60, 90, 130],
-    "Dietary Options": [
-        "Contains Dairy, Gluten, Meat", "Contains Meat, Gluten", 
-        "Contains Dairy, Vegetarian", "Contains Dairy, Meat", "Vegan, Gluten-Free", 
-        "Vegan", "Contains Meat", "Vegan", "Contains Gluten, Vegetarian", 
-        "Vegan"
-    ]
+    "Total Fat (g)": [20, 18, 12, 10, 5, 0.5, 7, 2, 3, 1],
+    "Protein (g)": [25, 35, 10, 15, 6, 1, 15, 6, 2, 4],
 }
 
 # Convert data to DataFrames
@@ -61,14 +48,41 @@ breakfast_df = pd.DataFrame(breakfast_data)
 lunch_df = pd.DataFrame(lunch_data)
 dinner_df = pd.DataFrame(dinner_data)
 
-# App Title
-st.title("Bentley University Dining Hall Nutrition and Meal Planner 🍴")
+# Function to calculate daily caloric needs (Mifflin-St Jeor Equation)
+def calculate_calories(weight, height, age, gender, activity_level):
+    if gender == "Male":
+        bmr = 10 * weight + 6.25 * height - 5 * age + 5
+    else:
+        bmr = 10 * weight + 6.25 * height - 5 * age - 161
 
-# Sidebar for meal selection
+    activity_multipliers = {
+        "Sedentary": 1.2,
+        "Lightly Active": 1.375,
+        "Moderately Active": 1.55,
+        "Very Active": 1.725
+    }
+    return bmr * activity_multipliers[activity_level]
+
+# App Title
+st.title("Personalized Nutrition and Meal Planning 🍴")
+
+# Sidebar for Personal Information
+st.sidebar.header("Personal Information")
+weight = st.sidebar.number_input("Weight (kg)", min_value=30, max_value=200, value=70)
+height = st.sidebar.number_input("Height (cm)", min_value=100, max_value=250, value=170)
+age = st.sidebar.number_input("Age (years)", min_value=10, max_value=100, value=25)
+gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
+activity_level = st.sidebar.selectbox("Activity Level", ["Sedentary", "Lightly Active", "Moderately Active", "Very Active"])
+
+# Calculate daily caloric needs
+daily_caloric_needs = calculate_calories(weight, height, age, gender, activity_level)
+st.sidebar.metric("Recommended Daily Calories", f"{int(daily_caloric_needs)} kcal")
+
+# Meal Type Selection
 st.sidebar.header("Choose a Meal Type")
 meal_type = st.sidebar.selectbox("Select a Meal", ["Breakfast", "Lunch", "Dinner"])
 
-# Select the appropriate DataFrame based on meal type
+# Select appropriate menu based on meal type
 if meal_type == "Breakfast":
     menu_df = breakfast_df
 elif meal_type == "Lunch":
@@ -76,58 +90,45 @@ elif meal_type == "Lunch":
 else:
     menu_df = dinner_df
 
-# Sidebar for filtering dietary preferences and calorie limit
-st.sidebar.header("Customize Your Preferences")
-dietary_preference = st.sidebar.selectbox(
-    "Select a Dietary Option",
-    ["All", "Vegan", "Vegetarian", "Contains Dairy", "Contains Gluten", "Contains Meat"]
-)
+# Sidebar for Filtering
+st.sidebar.header("Filter Your Options")
+dietary_preference = st.sidebar.selectbox("Select a Dietary Option", ["All", "Vegan", "Vegetarian"])
 calorie_limit = st.sidebar.slider("Set a Calorie Limit (per meal)", 50, 600, 300)
 
-# Filter menu based on preferences
+# Filter meals based on preferences
 if dietary_preference != "All":
-    filtered_menu = menu_df[
-        (menu_df["Dietary Options"].str.contains(dietary_preference)) & 
-        (menu_df["Calories"] <= calorie_limit)
-    ]
+    filtered_menu = menu_df[(menu_df["Calories"] <= calorie_limit)]
 else:
     filtered_menu = menu_df[menu_df["Calories"] <= calorie_limit]
 
-# Display dining hall menu
+# Display Menu
 st.subheader(f"{meal_type} Menu")
-if filtered_menu.empty:
-    st.warning("No meals available for the selected preferences. Please adjust your filters.")
-else:
-    st.dataframe(filtered_menu)
+st.dataframe(filtered_menu)
 
-# Allow users to select meals for planning
-st.subheader("Plan Your Meal")
-selected_meals = st.multiselect(
-    "Select meals to add to your plan:",
-    options=filtered_menu["Meal"].tolist()
-)
-
+# Meal Planning and Recommendations
+selected_meals = st.multiselect("Select meals to add to your plan:", options=filtered_menu["Meal"].tolist())
 if selected_meals:
-    # Calculate total nutrition for selected meals
-    selected_data = menu_df[menu_df["Meal"].isin(selected_meals)]
+    selected_data = filtered_menu[filtered_menu["Meal"].isin(selected_meals)]
     total_calories = selected_data["Calories"].sum()
 
-    # Display meal plan and nutrition summary
+    # Display selected meals and summary
     st.write("### Selected Meals")
     st.table(selected_data)
 
-    st.write("### Nutrition Summary")
+    st.write("### Summary")
     st.metric("Total Calories", f"{total_calories} kcal")
 
-    # Visualization: Calorie Distribution of Selected Meals
-    st.subheader("Calorie Distribution of Selected Meals")
-    fig, ax = plt.subplots()
-    ax.bar(selected_data["Meal"], selected_data["Calories"], color='skyblue')
-    ax.set_title("Calorie Distribution")
-    ax.set_xlabel("Meal")
-    ax.set_ylabel("Calories")
-    ax.tick_params(axis='x', rotation=45)
-    st.pyplot(fig)
+    # Recommendations
+    if total_calories > daily_caloric_needs:
+        st.error("Your meal plan exceeds your daily caloric needs.")
+    elif total_calories < daily_caloric_needs * 0.8:
+        st.warning("Your meal plan is too low in calories.")
+    else:
+        st.success("Your meal plan is within your recommended caloric range.")
+
+    # Nutritional Breakdown
+    st.write("### Nutritional Breakdown")
+    st.bar_chart(selected_data[["Calories", "Total Fat (g)", "Protein (g)"]])
 
 # Footer
-st.write("#### Stay healthy with delicious meals! 🌟")
+st.write("### Stay healthy and enjoy your meals! 🌟")
