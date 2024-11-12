@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Bentley University Dining Hall Menu Data
-data = {
+# Data for Breakfast, Lunch, and Dinner Menus
+breakfast_data = {
     "Meal": [
         "Bacon, Egg And Cheese Muffin", "Fried Egg O’muffin Sandwich", "Scrambled Eggs", 
         "Bacon", "Fried Tater Tots", "Buttermilk Pancakes", "Everything Omelet", 
@@ -21,18 +21,68 @@ data = {
         "Vegan", "Vegan", "Vegan"
     ]
 }
-menu_df = pd.DataFrame(data)
+
+lunch_data = {
+    "Meal": [
+        "Grilled Garlic Chicken", "Black Bean Burger", "Cheeseburger On Bun", 
+        "French Fries", "Bbq Pork Riblet Sandwich", "Beef Bulgogi Rice Bowl", 
+        "Cheese Pizza", "Vegetable Lovers Feast Pizza", "Pepperoni Pizza", 
+        "Creamy Broccoli & Cheddar Soup", "Cilantro Cucumber Salad", 
+        "Tabbouleh With Garbanzo Beans", "Salsa", "Cilantro Lime Brown Rice", 
+        "Baja Roasted Vegetables"
+    ],
+    "Calories": [150, 240, 200, 150, 380, 470, 250, 290, 250, 200, 70, 110, 10, 120, 50],
+    "Dietary Options": [
+        "Contains Meat", "Vegan", "Contains Dairy, Gluten", "Vegan", "Contains Meat, Gluten", 
+        "Contains Meat, Gluten", "Contains Dairy, Vegetarian", "Contains Dairy, Vegetarian", 
+        "Contains Dairy, Meat", "Contains Dairy, Vegetarian", "Vegan", "Vegan", "Vegan", 
+        "Vegan", "Vegan"
+    ]
+}
+
+dinner_data = {
+    "Meal": [
+        "Tomato, Bacon & Cheddar Baguette", "Beef Bulgogi Rice Bowl", 
+        "Vegetable Lovers Feast Pizza", "Pepperoni Pizza", "Gluten-Free Penne", 
+        "Simply Sauteed Broccoli Rabe", "Chili Con Carne", "Extra Firm Tofu", 
+        "Baked Garlic Breadstick", "Latin Chipotle Quinoa Salad"
+    ],
+    "Calories": [540, 470, 290, 250, 170, 25, 190, 60, 90, 130],
+    "Dietary Options": [
+        "Contains Dairy, Gluten, Meat", "Contains Meat, Gluten", 
+        "Contains Dairy, Vegetarian", "Contains Dairy, Meat", "Vegan, Gluten-Free", 
+        "Vegan", "Contains Meat", "Vegan", "Contains Gluten, Vegetarian", 
+        "Vegan"
+    ]
+}
+
+# Convert data to DataFrames
+breakfast_df = pd.DataFrame(breakfast_data)
+lunch_df = pd.DataFrame(lunch_data)
+dinner_df = pd.DataFrame(dinner_data)
 
 # App Title
-st.title("Bentley University Dining Hall Nutrition and Meal Planner 🍳")
+st.title("Bentley University Dining Hall Nutrition and Meal Planner 🍴")
 
-# Sidebar for user dietary preferences
+# Sidebar for meal selection
+st.sidebar.header("Choose a Meal Type")
+meal_type = st.sidebar.selectbox("Select a Meal", ["Breakfast", "Lunch", "Dinner"])
+
+# Select the appropriate DataFrame based on meal type
+if meal_type == "Breakfast":
+    menu_df = breakfast_df
+elif meal_type == "Lunch":
+    menu_df = lunch_df
+else:
+    menu_df = dinner_df
+
+# Sidebar for filtering dietary preferences and calorie limit
 st.sidebar.header("Customize Your Preferences")
 dietary_preference = st.sidebar.selectbox(
     "Select a Dietary Option",
-    ["All", "Contains Dairy", "Contains Egg", "Vegetarian", "Vegan", "Contains Meat"]
+    ["All", "Vegan", "Vegetarian", "Contains Dairy", "Contains Gluten", "Contains Meat"]
 )
-calorie_limit = st.sidebar.slider("Set a Calorie Limit (per meal)", 50, 400, 300)
+calorie_limit = st.sidebar.slider("Set a Calorie Limit (per meal)", 50, 600, 300)
 
 # Filter menu based on preferences
 if dietary_preference != "All":
@@ -44,7 +94,7 @@ else:
     filtered_menu = menu_df[menu_df["Calories"] <= calorie_limit]
 
 # Display dining hall menu
-st.subheader("Dining Hall Menu")
+st.subheader(f"{meal_type} Menu")
 if filtered_menu.empty:
     st.warning("No meals available for the selected preferences. Please adjust your filters.")
 else:
@@ -79,32 +129,5 @@ if selected_meals:
     ax.tick_params(axis='x', rotation=45)
     st.pyplot(fig)
 
-# Visualization: Overall Calorie Distribution
-st.subheader("Overall Calorie Distribution in Menu")
-fig, ax = plt.subplots()
-ax.hist(menu_df["Calories"], bins=10, color='lightgreen', edgecolor='black')
-ax.set_title("Calorie Distribution")
-ax.set_xlabel("Calories")
-ax.set_ylabel("Frequency")
-st.pyplot(fig)
-
-# Visualization: Dietary Options Distribution
-st.subheader("Dietary Options Distribution")
-dietary_counts = menu_df["Dietary Options"].value_counts()
-fig, ax = plt.subplots()
-ax.pie(dietary_counts, labels=dietary_counts.index, autopct='%1.1f%%', startangle=140)
-ax.set_title("Dietary Options")
-st.pyplot(fig)
-
-# Allow users to download their meal plan
-if selected_meals:
-    csv = selected_data.to_csv(index=False)
-    st.download_button(
-        label="Download Meal Plan as CSV",
-        data=csv,
-        file_name="bentley_meal_plan.csv",
-        mime="text/csv"
-    )
-
 # Footer
-st.write("#### Enjoy your breakfast while staying healthy at Bentley! 🥞")
+st.write("#### Stay healthy with delicious meals! 🌟")
