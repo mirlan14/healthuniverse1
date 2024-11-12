@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import datetime
+from datetime import datetime, date
 
 # Function to create a pie chart
 def plot_pie_chart(data, labels, title):
@@ -59,19 +59,25 @@ dining_hall_data = {
 
 # Sidebar for calendar selection
 st.sidebar.header("Select Date and Meal Type")
-selected_date = st.sidebar.date_input("Select a Date:", min_value=min(dining_hall_data.keys()), max_value=max(dining_hall_data.keys()))
+selected_date = st.sidebar.date_input("Select a Date:", min_value=min(dining_hall_data.keys()).date(), max_value=max(dining_hall_data.keys()).date())
 selected_meal_type = st.sidebar.selectbox("Select a Meal Type:", ["Breakfast", "Lunch", "Dinner"])
+
+# Ensure selected date is a datetime object
+selected_date = datetime.combine(selected_date, datetime.min.time())
 
 # Retrieve menu for selected date and meal type
 if selected_date in dining_hall_data:
-    menu_df = dining_hall_data[selected_date][selected_meal_type]
+    day_data = dining_hall_data[selected_date]
+    if selected_meal_type in day_data:
+        menu_df = day_data[selected_meal_type]
+        st.subheader(f"{selected_date.strftime('%A, %B %d, %Y')} {selected_meal_type} Menu")
+        st.dataframe(menu_df)
+    else:
+        st.error(f"No {selected_meal_type} menu available for {selected_date.strftime('%A, %B %d, %Y')}.")
+        st.stop()
 else:
-    st.error("No data available for the selected date.")
+    st.error(f"No data available for the selected date ({selected_date.strftime('%A, %B %d, %Y')}).")
     st.stop()
-
-# Display menu
-st.subheader(f"{selected_date.strftime('%A, %B %d, %Y')} {selected_meal_type} Menu")
-st.dataframe(menu_df)
 
 # Allow users to select meals and portions
 selected_meals = st.multiselect(
