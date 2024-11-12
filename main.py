@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Bentley University Dining Hall Menu Data
 data = {
@@ -67,6 +68,33 @@ if selected_meals:
 
     st.write("### Nutrition Summary")
     st.metric("Total Calories", f"{total_calories} kcal")
+
+    # Visualization: Calorie Distribution of Selected Meals
+    st.subheader("Calorie Distribution of Selected Meals")
+    fig, ax = plt.subplots()
+    ax.bar(selected_data["Meal"], selected_data["Calories"], color='skyblue')
+    ax.set_title("Calorie Distribution")
+    ax.set_xlabel("Meal")
+    ax.set_ylabel("Calories")
+    ax.tick_params(axis='x', rotation=45)
+    st.pyplot(fig)
+
+# Visualization: Overall Calorie Distribution
+st.subheader("Overall Calorie Distribution in Menu")
+fig, ax = plt.subplots()
+ax.hist(menu_df["Calories"], bins=10, color='lightgreen', edgecolor='black')
+ax.set_title("Calorie Distribution")
+ax.set_xlabel("Calories")
+ax.set_ylabel("Frequency")
+st.pyplot(fig)
+
+# Visualization: Dietary Options Distribution
+st.subheader("Dietary Options Distribution")
+dietary_counts = menu_df["Dietary Options"].value_counts()
+fig, ax = plt.subplots()
+ax.pie(dietary_counts, labels=dietary_counts.index, autopct='%1.1f%%', startangle=140)
+ax.set_title("Dietary Options")
+st.pyplot(fig)
 
 # Allow users to download their meal plan
 if selected_meals:
