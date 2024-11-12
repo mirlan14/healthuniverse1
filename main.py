@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import datetime, date
+from datetime import datetime
 
 # Function to create a pie chart
 def plot_pie_chart(data, labels, title):
@@ -14,70 +14,88 @@ def plot_pie_chart(data, labels, title):
 def calculate_totals(selected_data, portions):
     selected_data = selected_data.copy()
     selected_data["Portions"] = portions
-    for column in ["Calories", "Total Fat (g)", "Protein (g)"]:
+    for column in ["Calories", "Total Fat (g)", "Protein (g)", "Carbs (g)", "Fiber (g)"]:
         selected_data[column] *= selected_data["Portions"]
-    return selected_data, selected_data[["Calories", "Total Fat (g)", "Protein (g)"]].sum()
+    return selected_data, selected_data[["Calories", "Total Fat (g)", "Protein (g)", "Carbs (g)", "Fiber (g)"]].sum()
 
-# Updated Bentley Dining Hall Data
+# Updated Bentley Dining Hall Data with additional nutrients
 dining_hall_data = {
-    datetime(2023, 11, 13): {  # Monday
+    "Monday": {
         "Breakfast": pd.DataFrame([
-            {"Meal": "Bacon, Egg And Cheese Muffin", "Calories": 350, "Total Fat (g)": 12, "Protein (g)": 15},
-            {"Meal": "Fried Egg O'muffin Sandwich", "Calories": 310, "Total Fat (g)": 10, "Protein (g)": 13},
-            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12},
-            {"Meal": "Bacon Slices", "Calories": 70, "Total Fat (g)": 6, "Protein (g)": 5},
-            {"Meal": "Fried Tater Tots", "Calories": 250, "Total Fat (g)": 15, "Protein (g)": 2},
-            {"Meal": "Buttermilk Pancakes", "Calories": 180, "Total Fat (g)": 9, "Protein (g)": 4},
+            {"Meal": "Bacon, Egg And Cheese Muffin", "Calories": 350, "Total Fat (g)": 12, "Protein (g)": 15, "Carbs (g)": 30, "Fiber (g)": 2},
+            {"Meal": "Fried Egg O'muffin Sandwich", "Calories": 310, "Total Fat (g)": 10, "Protein (g)": 13, "Carbs (g)": 28, "Fiber (g)": 2},
+            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
         ]),
         "Lunch": pd.DataFrame([
-            {"Meal": "Rosemary Grilled Pork Chop", "Calories": 300, "Total Fat (g)": 10, "Protein (g)": 30},
-            {"Meal": "Grilled Fresh Tilapia", "Calories": 180, "Total Fat (g)": 5, "Protein (g)": 20},
-            {"Meal": "Cheese Pizza", "Calories": 250, "Total Fat (g)": 8, "Protein (g)": 10},
-            {"Meal": "Vegetable Lovers Feast Pizza", "Calories": 290, "Total Fat (g)": 12, "Protein (g)": 8},
+            {"Meal": "Rosemary Grilled Pork Chop", "Calories": 300, "Total Fat (g)": 10, "Protein (g)": 30, "Carbs (g)": 0, "Fiber (g)": 0},
+            {"Meal": "Cheese Pizza", "Calories": 250, "Total Fat (g)": 8, "Protein (g)": 10, "Carbs (g)": 32, "Fiber (g)": 2},
         ]),
         "Dinner": pd.DataFrame([
-            {"Meal": "Roast Loin Of Pork", "Calories": 210, "Total Fat (g)": 10, "Protein (g)": 25},
-            {"Meal": "Rice & Red Beans", "Calories": 180, "Total Fat (g)": 3, "Protein (g)": 5},
-            {"Meal": "Vegetable Lovers Feast Pizza", "Calories": 290, "Total Fat (g)": 12, "Protein (g)": 8},
+            {"Meal": "Roast Loin Of Pork", "Calories": 210, "Total Fat (g)": 10, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
+            {"Meal": "Rice & Red Beans", "Calories": 180, "Total Fat (g)": 3, "Protein (g)": 5, "Carbs (g)": 35, "Fiber (g)": 4},
         ]),
     },
-    datetime(2023, 11, 14): {  # Tuesday
+    "Tuesday": {
         "Breakfast": pd.DataFrame([
-            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12},
-            {"Meal": "Oatmeal", "Calories": 110, "Total Fat (g)": 1, "Protein (g)": 4},
+            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
+            {"Meal": "Oatmeal", "Calories": 110, "Total Fat (g)": 1, "Protein (g)": 4, "Carbs (g)": 20, "Fiber (g)": 3},
         ]),
         "Lunch": pd.DataFrame([
-            {"Meal": "Beef Bulgogi Rice Bowl", "Calories": 470, "Total Fat (g)": 20, "Protein (g)": 35},
-            {"Meal": "Cheese Pizza", "Calories": 250, "Total Fat (g)": 8, "Protein (g)": 10},
+            {"Meal": "Beef Bulgogi Rice Bowl", "Calories": 470, "Total Fat (g)": 20, "Protein (g)": 35, "Carbs (g)": 50, "Fiber (g)": 5},
         ]),
         "Dinner": pd.DataFrame([
-            {"Meal": "Pepperoni Pizza", "Calories": 250, "Total Fat (g)": 10, "Protein (g)": 10},
-            {"Meal": "Grilled Garlic Chicken", "Calories": 150, "Total Fat (g)": 2, "Protein (g)": 30},
+            {"Meal": "Pepperoni Pizza", "Calories": 250, "Total Fat (g)": 10, "Protein (g)": 10, "Carbs (g)": 32, "Fiber (g)": 2},
+        ]),
+    },
+    "Wednesday": {
+        "Breakfast": pd.DataFrame([
+            {"Meal": "Egg And Cheese Breakfast Taco", "Calories": 210, "Total Fat (g)": 8, "Protein (g)": 10, "Carbs (g)": 22, "Fiber (g)": 2},
+            {"Meal": "Blueberry Pancakes", "Calories": 220, "Total Fat (g)": 7, "Protein (g)": 5, "Carbs (g)": 32, "Fiber (g)": 1},
+            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
+        ]),
+        "Lunch": pd.DataFrame([
+            {"Meal": "Grilled Steak", "Calories": 260, "Total Fat (g)": 15, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
+            {"Meal": "Fajita Chicken, Pintos And Rice Bowl", "Calories": 910, "Total Fat (g)": 35, "Protein (g)": 45, "Carbs (g)": 90, "Fiber (g)": 7},
+        ]),
+        "Dinner": pd.DataFrame([
+            {"Meal": "Herb Roast Chicken Breast", "Calories": 130, "Total Fat (g)": 5, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
+            {"Meal": "Chicken Nuggets", "Calories": 350, "Total Fat (g)": 20, "Protein (g)": 15, "Carbs (g)": 22, "Fiber (g)": 2},
         ]),
     },
 }
 
-# Sidebar for calendar selection
-st.sidebar.header("Select Date and Meal Type")
-selected_date = st.sidebar.date_input("Select a Date:", min_value=min(dining_hall_data.keys()).date(), max_value=max(dining_hall_data.keys()).date())
+# Sidebar for user personal info
+st.sidebar.header("Personal Information")
+weight = st.sidebar.number_input("Weight (kg):", min_value=30, max_value=200, value=70)
+height = st.sidebar.number_input("Height (cm):", min_value=100, max_value=250, value=170)
+age = st.sidebar.number_input("Age (years):", min_value=10, max_value=100, value=25)
+gender = st.sidebar.selectbox("Gender:", ["Male", "Female", "Other"])
+activity_level = st.sidebar.selectbox("Activity Level:", ["Sedentary", "Lightly Active", "Moderately Active", "Very Active"])
+
+# Calculate daily caloric needs
+if gender == "Male":
+    bmr = 10 * weight + 6.25 * height - 5 * age + 5
+else:
+    bmr = 10 * weight + 6.25 * height - 5 * age - 161
+
+activity_multiplier = {
+    "Sedentary": 1.2,
+    "Lightly Active": 1.375,
+    "Moderately Active": 1.55,
+    "Very Active": 1.725,
+}
+daily_caloric_needs = int(bmr * activity_multiplier[activity_level])
+st.sidebar.metric("Recommended Daily Calories", f"{daily_caloric_needs} kcal")
+
+# Sidebar for day and meal type selection
+st.sidebar.header("Select Day and Meal Type")
+selected_day = st.sidebar.selectbox("Select a Day:", list(dining_hall_data.keys()))
 selected_meal_type = st.sidebar.selectbox("Select a Meal Type:", ["Breakfast", "Lunch", "Dinner"])
 
-# Ensure selected date is a datetime object
-selected_date = datetime.combine(selected_date, datetime.min.time())
-
-# Retrieve menu for selected date and meal type
-if selected_date in dining_hall_data:
-    day_data = dining_hall_data[selected_date]
-    if selected_meal_type in day_data:
-        menu_df = day_data[selected_meal_type]
-        st.subheader(f"{selected_date.strftime('%A, %B %d, %Y')} {selected_meal_type} Menu")
-        st.dataframe(menu_df)
-    else:
-        st.error(f"No {selected_meal_type} menu available for {selected_date.strftime('%A, %B %d, %Y')}.")
-        st.stop()
-else:
-    st.error(f"No data available for the selected date ({selected_date.strftime('%A, %B %d, %Y')}).")
-    st.stop()
+# Retrieve menu for selected day and meal type
+menu_df = dining_hall_data[selected_day][selected_meal_type]
+st.subheader(f"{selected_day} {selected_meal_type} Menu")
+st.dataframe(menu_df)
 
 # Allow users to select meals and portions
 selected_meals = st.multiselect(
@@ -105,24 +123,18 @@ if selected_meals:
     st.metric("Total Calories", f"{totals['Calories']} kcal")
     st.metric("Total Fat", f"{totals['Total Fat (g)']} g")
     st.metric("Total Protein", f"{totals['Protein (g)']} g")
+    st.metric("Total Carbs", f"{totals['Carbs (g)']} g")
+    st.metric("Total Fiber", f"{totals['Fiber (g)']} g")
 
     # Nutritional Breakdown Pie Chart
     st.subheader("Nutritional Breakdown")
     pie_chart = plot_pie_chart(
-        data=totals.values,
-        labels=totals.index,
+        data=[totals["Carbs (g)"], totals["Protein (g)"], totals["Total Fat (g)"]],
+        labels=["Carbs (g)", "Protein (g)", "Total Fat (g)"],
         title="Nutritional Distribution"
     )
     st.pyplot(pie_chart)
 
     # Recommendations
-    daily_caloric_needs = 2000  # Example value for demonstration
     if totals["Calories"] > daily_caloric_needs:
-        st.error("Your meal plan exceeds your daily caloric needs.")
-    elif totals["Calories"] < daily_caloric_needs * 0.8:
-        st.warning("Your meal plan is too low in calories.")
-    else:
-        st.success("Your meal plan is within your recommended caloric range.")
-
-# Footer
-st.write("### Stay healthy and enjoy your meals! 🌟")
+        st.error("Your
