@@ -1,3 +1,4 @@
+pip install streamlit
 import streamlit as st
 
 st.title("AI-Driven Nutrition Planner")
@@ -10,3 +11,19 @@ chronic_conditions = st.sidebar.multiselect(
     "Select chronic conditions:",
     ["Diabetes", "Hypertension", "Obesity"]
 )
+
+st.header("Personalized Meal Plan")
+meals = ["Breakfast: Oatmeal with berries", 
+         "Lunch: Grilled chicken salad", 
+         "Dinner: Salmon with quinoa"]
+
+for meal in meals:
+    st.write(meal)
+
+st.header("Personalized Meal Plan")
+meals = ["Breakfast: Oatmeal with berries", 
+         "Lunch: Grilled chicken salad", 
+         "Dinner: Salmon with quinoa"]
+
+for meal in meals:
+    st.write(meal)
