@@ -136,5 +136,9 @@ if selected_meals:
     st.pyplot(pie_chart)
 
     # Recommendations
-    if totals["Calories"] > daily_caloric_needs:
-        st.error("Your
+if totals["Calories"] > daily_caloric_needs:
+    st.error("Your meal plan exceeds your daily caloric needs. Consider reducing high-calorie items.")
+elif totals["Calories"] < daily_caloric_needs * 0.8:
+    st.warning("Your meal plan is too low in calories. Consider adding more nutrient-dense meals.")
+else:
+    st.success("Your meal plan is within your recommended caloric range. Keep it up!")
