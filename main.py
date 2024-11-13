@@ -20,48 +20,76 @@ def calculate_totals(selected_data, portions):
 
 # Updated Bentley Dining Hall Data with additional nutrients
 dining_hall_data = {
-    "Monday": {
-        "Breakfast": pd.DataFrame([
-            {"Meal": "Bacon, Egg And Cheese Muffin", "Calories": 350, "Total Fat (g)": 12, "Protein (g)": 15, "Carbs (g)": 30, "Fiber (g)": 2},
-            {"Meal": "Fried Egg O'muffin Sandwich", "Calories": 310, "Total Fat (g)": 10, "Protein (g)": 13, "Carbs (g)": 28, "Fiber (g)": 2},
-            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
-        ]),
-        "Lunch": pd.DataFrame([
-            {"Meal": "Rosemary Grilled Pork Chop", "Calories": 300, "Total Fat (g)": 10, "Protein (g)": 30, "Carbs (g)": 0, "Fiber (g)": 0},
-            {"Meal": "Cheese Pizza", "Calories": 250, "Total Fat (g)": 8, "Protein (g)": 10, "Carbs (g)": 32, "Fiber (g)": 2},
-        ]),
-        "Dinner": pd.DataFrame([
-            {"Meal": "Roast Loin Of Pork", "Calories": 210, "Total Fat (g)": 10, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
-            {"Meal": "Rice & Red Beans", "Calories": 180, "Total Fat (g)": 3, "Protein (g)": 5, "Carbs (g)": 35, "Fiber (g)": 4},
-        ]),
+  "Monday": {
+    "Breakfast": pd.DataFrame([
+        {"Meal": "Bacon, Egg And Cheese Muffin", "Calories": 350, "Total Fat (g)": 12, "Protein (g)": 15, "Carbs (g)": 30, "Fiber (g)": 2},
+        {"Meal": "Fried Egg O'muffin Sandwich", "Calories": 310, "Total Fat (g)": 10, "Protein (g)": 13, "Carbs (g)": 28, "Fiber (g)": 2},
+        {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
+        {"Meal": "Bacon Slices", "Calories": 70, "Total Fat (g)": 6, "Protein (g)": 5, "Carbs (g)": 1, "Fiber (g)": 0},
+        {"Meal": "Fried Tater Tots", "Calories": 250, "Total Fat (g)": 15, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 2},
+        {"Meal": "Buttermilk Pancakes", "Calories": 180, "Total Fat (g)": 9, "Protein (g)": 4, "Carbs (g)": 20, "Fiber (g)": 1},
+        {"Meal": "Everything Omelet", "Calories": 290, "Total Fat (g)": 20, "Protein (g)": 18, "Carbs (g)": 3, "Fiber (g)": 0},
+        {"Meal": "Grits", "Calories": 90, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 20, "Fiber (g)": 1},
+        {"Meal": "Oatmeal", "Calories": 110, "Total Fat (g)": 2, "Protein (g)": 3, "Carbs (g)": 19, "Fiber (g)": 3},
+        {"Meal": "Bacon", "Calories": 60, "Total Fat (g)": 5, "Protein (g)": 4, "Carbs (g)": 0, "Fiber (g)": 0},
+        {"Meal": "Agave Roasted Peaches", "Calories": 20, "Total Fat (g)": 0, "Protein (g)": 0, "Carbs (g)": 5, "Fiber (g)": 1},
+        {"Meal": "Roasted Mexican Potatoes", "Calories": 45, "Total Fat (g)": 1, "Protein (g)": 1, "Carbs (g)": 10, "Fiber (g)": 1},
+        {"Meal": "Mango Banana Smoothie", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 24, "Fiber (g)": 1},
+        {"Meal": "Strawberry Banana Smoothie", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 23, "Fiber (g)": 1},
+        {"Meal": "Pineapple & Honey Smoothie", "Calories": 190, "Total Fat (g)": 0, "Protein (g)": 2, "Carbs (g)": 45, "Fiber (g)": 2},
+        {"Meal": "Mango Pineapple Smoothie", "Calories": 110, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 26, "Fiber (g)": 1},
+        {"Meal": "Brown Sugar Cinnamon Mini Scone", "Calories": 200, "Total Fat (g)": 10, "Protein (g)": 3, "Carbs (g)": 26, "Fiber (g)": 1},
+        {"Meal": "Strawberry Shortcake Muffins", "Calories": 130, "Total Fat (g)": 5, "Protein (g)": 2, "Carbs (g)": 19, "Fiber (g)": 1},
+        {"Meal": "Scrambled Tofu", "Calories": 60, "Total Fat (g)": 2, "Protein (g)": 7, "Carbs (g)": 1, "Fiber (g)": 1},
+        {"Meal": "Lyonnaise Potatoes", "Calories": 45, "Total Fat (g)": 1, "Protein (g)": 1, "Carbs (g)": 10, "Fiber (g)": 1},
+        {"Meal": "Roasted Red Beets", "Calories": 25, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 5, "Fiber (g)": 1},
+    ]),
     },
-    "Tuesday": {
-        "Breakfast": pd.DataFrame([
-            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
-            {"Meal": "Oatmeal", "Calories": 110, "Total Fat (g)": 1, "Protein (g)": 4, "Carbs (g)": 20, "Fiber (g)": 3},
-        ]),
-        "Lunch": pd.DataFrame([
-            {"Meal": "Beef Bulgogi Rice Bowl", "Calories": 470, "Total Fat (g)": 20, "Protein (g)": 35, "Carbs (g)": 50, "Fiber (g)": 5},
-        ]),
-        "Dinner": pd.DataFrame([
-            {"Meal": "Pepperoni Pizza", "Calories": 250, "Total Fat (g)": 10, "Protein (g)": 10, "Carbs (g)": 32, "Fiber (g)": 2},
-        ]),
+   "Tuesday": {
+    "Breakfast": pd.DataFrame([
+        {"Meal": "Egg & Cheese Bagel With Sausage", "Calories": 500, "Total Fat (g)": 20, "Protein (g)": 22, "Carbs (g)": 55, "Fiber (g)": 3},
+        {"Meal": "Scrambled Egg & Cheese On Bagel", "Calories": 300, "Total Fat (g)": 10, "Protein (g)": 15, "Carbs (g)": 35, "Fiber (g)": 2},
+        {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
+        {"Meal": "Oven Roasted Greek Potatoes", "Calories": 100, "Total Fat (g)": 2, "Protein (g)": 2, "Carbs (g)": 20, "Fiber (g)": 2},
+        {"Meal": "Grilled Kielbasa", "Calories": 190, "Total Fat (g)": 16, "Protein (g)": 8, "Carbs (g)": 1, "Fiber (g)": 0},
+        {"Meal": "French Waffle", "Calories": 180, "Total Fat (g)": 7, "Protein (g)": 4, "Carbs (g)": 22, "Fiber (g)": 1},
+        {"Meal": "Everything Omelet", "Calories": 290, "Total Fat (g)": 20, "Protein (g)": 18, "Carbs (g)": 3, "Fiber (g)": 0},
+        {"Meal": "Grits", "Calories": 90, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 20, "Fiber (g)": 1},
+        {"Meal": "Oatmeal", "Calories": 110, "Total Fat (g)": 2, "Protein (g)": 3, "Carbs (g)": 19, "Fiber (g)": 3},
+        {"Meal": "Griddled Ham Steak", "Calories": 70, "Total Fat (g)": 3, "Protein (g)": 10, "Carbs (g)": 1, "Fiber (g)": 0},
+        {"Meal": "Potato & Kale Hash", "Calories": 130, "Total Fat (g)": 5, "Protein (g)": 3, "Carbs (g)": 15, "Fiber (g)": 2},
+        {"Meal": "Chocolate Strawberry Chia Seed Pudding", "Calories": 290, "Total Fat (g)": 15, "Protein (g)": 8, "Carbs (g)": 28, "Fiber (g)": 6},
+        {"Meal": "Strawberry Banana Smoothie", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 23, "Fiber (g)": 1},
+        {"Meal": "Mango Banana Smoothie", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 24, "Fiber (g)": 1},
+        {"Meal": "Mango Pineapple Smoothie", "Calories": 110, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 26, "Fiber (g)": 1},
+        {"Meal": "Fresh Melons, Strawberries & Grapes", "Calories": 25, "Total Fat (g)": 0, "Protein (g)": 0, "Carbs (g)": 6, "Fiber (g)": 0},
+        {"Meal": "Scrambled Vegan Egg Substitute", "Calories": 100, "Total Fat (g)": 3, "Protein (g)": 8, "Carbs (g)": 2, "Fiber (g)": 1},
+        {"Meal": "Shredded Hash Browns", "Calories": 260, "Total Fat (g)": 12, "Protein (g)": 3, "Carbs (g)": 30, "Fiber (g)": 2},
+        {"Meal": "Roasted Carrots", "Calories": 40, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 10, "Fiber (g)": 3},
+    ]),
     },
     "Wednesday": {
-        "Breakfast": pd.DataFrame([
-            {"Meal": "Egg And Cheese Breakfast Taco", "Calories": 210, "Total Fat (g)": 8, "Protein (g)": 10, "Carbs (g)": 22, "Fiber (g)": 2},
-            {"Meal": "Blueberry Pancakes", "Calories": 220, "Total Fat (g)": 7, "Protein (g)": 5, "Carbs (g)": 32, "Fiber (g)": 1},
-            {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
-        ]),
-        "Lunch": pd.DataFrame([
-            {"Meal": "Grilled Steak", "Calories": 260, "Total Fat (g)": 15, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
-            {"Meal": "Fajita Chicken, Pintos And Rice Bowl", "Calories": 910, "Total Fat (g)": 35, "Protein (g)": 45, "Carbs (g)": 90, "Fiber (g)": 7},
-        ]),
-        "Dinner": pd.DataFrame([
-            {"Meal": "Herb Roast Chicken Breast", "Calories": 130, "Total Fat (g)": 5, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
-            {"Meal": "Chicken Nuggets", "Calories": 350, "Total Fat (g)": 20, "Protein (g)": 15, "Carbs (g)": 22, "Fiber (g)": 2},
-        ]),
-    },
+    "Breakfast": pd.DataFrame([
+        {"Meal": "Ham, Egg And Cheese Taco", "Calories": 220, "Total Fat (g)": 12, "Protein (g)": 14, "Carbs (g)": 18, "Fiber (g)": 2},
+        {"Meal": "Egg And Cheese Breakfast Taco", "Calories": 210, "Total Fat (g)": 10, "Protein (g)": 12, "Carbs (g)": 17, "Fiber (g)": 2},
+        {"Meal": "Blueberry Pancakes", "Calories": 220, "Total Fat (g)": 7, "Protein (g)": 5, "Carbs (g)": 32, "Fiber (g)": 1},
+        {"Meal": "O'Brien Potatoes", "Calories": 140, "Total Fat (g)": 5, "Protein (g)": 2, "Carbs (g)": 18, "Fiber (g)": 2},
+        {"Meal": "Pork Sausage Link", "Calories": 100, "Total Fat (g)": 8, "Protein (g)": 5, "Carbs (g)": 1, "Fiber (g)": 0},
+        {"Meal": "Scrambled Eggs", "Calories": 190, "Total Fat (g)": 5, "Protein (g)": 12, "Carbs (g)": 2, "Fiber (g)": 0},
+        {"Meal": "Everything Omelet", "Calories": 290, "Total Fat (g)": 20, "Protein (g)": 18, "Carbs (g)": 3, "Fiber (g)": 0},
+        {"Meal": "Grits", "Calories": 90, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 20, "Fiber (g)": 1},
+        {"Meal": "Oatmeal", "Calories": 110, "Total Fat (g)": 2, "Protein (g)": 3, "Carbs (g)": 19, "Fiber (g)": 3},
+        {"Meal": "Hash Browned Potatoes", "Calories": 120, "Total Fat (g)": 6, "Protein (g)": 2, "Carbs (g)": 15, "Fiber (g)": 2},
+        {"Meal": "Turkey Sausage Patty", "Calories": 80, "Total Fat (g)": 6, "Protein (g)": 8, "Carbs (g)": 0, "Fiber (g)": 0},
+        {"Meal": "Sweet Potato Pancakes", "Calories": 270, "Total Fat (g)": 8, "Protein (g)": 6, "Carbs (g)": 40, "Fiber (g)": 4},
+        {"Meal": "Mango Banana Smoothie", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 24, "Fiber (g)": 1},
+        {"Meal": "Mango Pineapple Smoothie", "Calories": 110, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 26, "Fiber (g)": 1},
+        {"Meal": "Pineapple & Honey Smoothie", "Calories": 190, "Total Fat (g)": 0, "Protein (g)": 2, "Carbs (g)": 45, "Fiber (g)": 2},
+        {"Meal": "Strawberry Banana Smoothie", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 23, "Fiber (g)": 1},
+        {"Meal": "Sauteed Peppers & Onions", "Calories": 80, "Total Fat (g)": 5, "Protein (g)": 1, "Carbs (g)": 8, "Fiber (g)": 2},
+        {"Meal": "Scrambled Tofu", "Calories": 60, "Total Fat (g)": 3, "Protein (g)": 6, "Carbs (g)": 2, "Fiber (g)": 1},
+        {"Meal": "Classic Grits", "Calories": 100, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 1},
+    ]),
 }
 
 # Sidebar for user personal info
