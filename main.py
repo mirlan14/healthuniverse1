@@ -127,40 +127,39 @@ if selected_meals:
     st.metric("Total Fiber", f"{totals['Fiber (g)']} g")
 
     # Nutritional Breakdown Pie Chart
-st.subheader("Nutritional Breakdown")
-pie_chart = plot_pie_chart(
+    st.subheader("Nutritional Breakdown")
+    pie_chart = plot_pie_chart(
     data=[totals["Carbs (g)"], totals["Protein (g)"], totals["Total Fat (g)"]],
     labels=["Carbs (g)", "Protein (g)", "Total Fat (g)"],
-    title="Nutritional Distribution"
-)
-st.pyplot(pie_chart)
+    title="Nutritional Distribution")
+    st.pyplot(pie_chart)
 
-# Recommendations
-if totals["Calories"] > daily_caloric_needs:
-    st.error("Your meal plan exceeds your daily caloric needs. Consider reducing high-calorie items.")
-elif totals["Calories"] < daily_caloric_needs * 0.8:
-    st.warning("Your meal plan is too low in calories. Consider adding more nutrient-dense meals.")
-else:
-    st.success("Your meal plan is within your recommended caloric range. Keep it up!")
-
-# Dietitian Section
-st.markdown("---")
-st.header("Need Help with Your Diet?")
-st.write("If you have questions or concerns about your diet, you can book an appointment with our on-site campus dietitian.")
-
-# Display dietitian information
-st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dietitian_photo_example.jpg/300px-Dietitian_photo_example.jpg", caption="Hayley Ruff RD, LDN")
-st.write("**Dietitian: Hayley Ruff RD, LDN**")
-st.write("📧 **Email:** [hayley.ruff@sodexo.com](mailto:hayley.ruff@sodexo.com)")
-st.write("📞 **Phone:** +1 (508) 414-9633")
-
-# Appointment Booking Form
-st.subheader("Book an Appointment")
-with st.form("dietitian_appointment_form"):
-    name = st.text_input("Your Name")
-    email = st.text_input("Your Email")
-    message = st.text_area("What would you like to discuss?")
-    submitted = st.form_submit_button("Submit Appointment Request")
-
-    if submitted:
-        st.success(f"Thank you, {name}! Your request has been submitted. Hayley Ruff will reach out to you at {email} soon.")
+    # Recommendations
+    if totals["Calories"] > daily_caloric_needs:
+        st.error("Your meal plan exceeds your daily caloric needs. Consider reducing high-calorie items.")
+    elif totals["Calories"] < daily_caloric_needs * 0.8:
+        st.warning("Your meal plan is too low in calories. Consider adding more nutrient-dense meals.")
+    else:
+        st.success("Your meal plan is within your recommended caloric range. Keep it up!")
+    
+    # Dietitian Section
+    st.markdown("---")
+    st.header("Need Help with Your Diet?")
+    st.write("If you have questions or concerns about your diet, you can book an appointment with our on-site campus dietitian.")
+    
+    # Display dietitian information
+    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dietitian_photo_example.jpg/300px-Dietitian_photo_example.jpg", caption="Hayley Ruff RD, LDN")
+    st.write("**Dietitian: Hayley Ruff RD, LDN**")
+    st.write("📧 **Email:** [hayley.ruff@sodexo.com](mailto:hayley.ruff@sodexo.com)")
+    st.write("📞 **Phone:** +1 (508) 414-9633")
+    
+    # Appointment Booking Form
+    st.subheader("Book an Appointment")
+    with st.form("dietitian_appointment_form"):
+        name = st.text_input("Your Name")
+        email = st.text_input("Your Email")
+        message = st.text_area("What would you like to discuss?")
+        submitted = st.form_submit_button("Submit Appointment Request")
+    
+        if submitted:
+            st.success(f"Thank you, {name}! Your request has been submitted. Hayley Ruff will reach out to you at {email} soon.")
