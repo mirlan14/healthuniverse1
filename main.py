@@ -91,6 +91,7 @@ dining_hall_data = {
         {"Meal": "Classic Grits", "Calories": 100, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 1},
     ]),
 }
+}
 
 # Sidebar for user personal info
 st.sidebar.header("Personal Information")
