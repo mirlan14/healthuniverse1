@@ -165,7 +165,7 @@ dining_hall_data = {
         {"Meal": "Scrambled Tofu", "Calories": 60, "Total Fat (g)": 3, "Protein (g)": 6, "Carbs (g)": 2, "Fiber (g)": 1},
         {"Meal": "Classic Grits", "Calories": 100, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 1},
     ]),
-    "Lunch" = pd.DataFrame([
+    "Lunch": pd.DataFrame([
     {"Meal": "Balsamic Collard Greens", "Calories": 330, "Total Fat (g)": 5, "Protein (g)": 6, "Carbs (g)": 20, "Fiber (g)": 8},
     {"Meal": "Turkish Bulgur Pilaf With Garbanzo Beans", "Calories": 510, "Total Fat (g)": 8, "Protein (g)": 18, "Carbs (g)": 80, "Fiber (g)": 12},
     {"Meal": "Grilled Steak", "Calories": 260, "Total Fat (g)": 15, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
@@ -182,7 +182,7 @@ dining_hall_data = {
     {"Meal": "French Fries", "Calories": 150, "Total Fat (g)": 5, "Protein (g)": 2, "Carbs (g)": 24, "Fiber (g)": 2},
     {"Meal": "Grilled Garlic Chicken", "Calories": 150, "Total Fat (g)": 2, "Protein (g)": 30, "Carbs (g)": 0, "Fiber (g)": 0},
     ]),
-    "Dinner" = pd.DataFrame([
+    "Dinner": pd.DataFrame([
     {"Meal": "Steamed Broccoli", "Calories": 10, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 2, "Fiber (g)": 1},
     {"Meal": "Sticky Rice", "Calories": 160, "Total Fat (g)": 0, "Protein (g)": 3, "Carbs (g)": 37, "Fiber (g)": 1},
     {"Meal": "Herb Roast Chicken Breast", "Calories": 130, "Total Fat (g)": 3, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
