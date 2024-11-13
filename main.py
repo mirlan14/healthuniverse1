@@ -148,7 +148,7 @@ if selected_meals:
     st.write("If you have questions or concerns about your diet, you can book an appointment with our on-site campus dietitian.")
     
     # Display dietitian information
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dietitian_photo_example.jpg/300px-Dietitian_photo_example.jpg", caption="Hayley Ruff RD, LDN")
+    st.image("images/Hayley_tcm17-45509.jpg", caption="Hayley Ruff RD, LDN", width=300)
     st.write("**Dietitian: Hayley Ruff RD, LDN**")
     st.write("📧 **Email:** [hayley.ruff@sodexo.com](mailto:hayley.ruff@sodexo.com)")
     st.write("📞 **Phone:** +1 (508) 414-9633")
