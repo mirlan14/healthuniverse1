@@ -182,7 +182,7 @@ dining_hall_data = {
     {"Meal": "French Fries", "Calories": 150, "Total Fat (g)": 5, "Protein (g)": 2, "Carbs (g)": 24, "Fiber (g)": 2},
     {"Meal": "Grilled Garlic Chicken", "Calories": 150, "Total Fat (g)": 2, "Protein (g)": 30, "Carbs (g)": 0, "Fiber (g)": 0},
     ]),
-    "Dinner"] = pd.DataFrame([
+    "Dinner" = pd.DataFrame([
     {"Meal": "Steamed Broccoli", "Calories": 10, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 2, "Fiber (g)": 1},
     {"Meal": "Sticky Rice", "Calories": 160, "Total Fat (g)": 0, "Protein (g)": 3, "Carbs (g)": 37, "Fiber (g)": 1},
     {"Meal": "Herb Roast Chicken Breast", "Calories": 130, "Total Fat (g)": 3, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
