@@ -10,6 +10,37 @@ def plot_pie_chart(data, labels, title):
     ax.set_title(title)
     return fig
 
+# Function to create a histogram
+def plot_histogram(data, title):
+    fig, ax = plt.subplots()
+    ax.hist(data, bins=10, color="skyblue", edgecolor="black")
+    ax.set_title(title)
+    ax.set_xlabel("Calories")
+    ax.set_ylabel("Frequency")
+    return fig
+
+# Function to create a waterfall chart
+def plot_waterfall(meals, calories):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    cumulative = 0
+    for i, (meal, calorie) in enumerate(zip(meals, calories)):
+        ax.bar(i, calorie, bottom=cumulative, color="orange" if calorie > 0 else "red")
+        cumulative += calorie
+    ax.set_xticks(range(len(meals)))
+    ax.set_xticklabels(meals, rotation=45, ha="right")
+    ax.set_ylabel("Cumulative Calories")
+    ax.set_title("Caloric Contribution Waterfall Chart")
+    return fig
+
+# Function to create a line chart
+def plot_line_chart(meal_types, calories, title):
+    fig, ax = plt.subplots()
+    ax.plot(meal_types, calories, marker="o", linestyle="-", color="green")
+    ax.set_title(title)
+    ax.set_xlabel("Meal Type")
+    ax.set_ylabel("Calories")
+    return fig
+
 # Function to calculate totals based on portions
 def calculate_totals(selected_data, portions):
     selected_data = selected_data.copy()
