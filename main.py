@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from datetime import datetime
 
 # Function to create a pie chart
 def plot_pie_chart(data, labels, title):
@@ -17,6 +16,27 @@ def calculate_totals(selected_data, portions):
     for column in ["Calories", "Total Fat (g)", "Protein (g)", "Carbs (g)", "Fiber (g)"]:
         selected_data[column] *= selected_data["Portions"]
     return selected_data, selected_data[["Calories", "Total Fat (g)", "Protein (g)", "Carbs (g)", "Fiber (g)"]].sum()
+
+# Function to filter meals based on preferences and nutritional limits
+def filter_meals(menu, preferences, max_calories, max_fat):
+    filtered_menu = menu.copy()
+
+    # Apply nutritional limits
+    filtered_menu = filtered_menu[
+        (filtered_menu["Calories"] <= max_calories) &
+        (filtered_menu["Total Fat (g)"] <= max_fat)
+    ]
+
+    # Apply dietary preferences
+    if "Vegan" in preferences:
+        vegan_meals = ["Scrambled Tofu", "Roasted Red Beets", "Oatmeal", "Agave Roasted Peaches"]
+        filtered_menu = filtered_menu[filtered_menu["Meal"].isin(vegan_meals)]
+
+    if "Vegetarian" in preferences:
+        vegetarian_meals = ["Oatmeal", "Buttermilk Pancakes", "Scrambled Tofu", "Brown Sugar Cinnamon Mini Scone"]
+        filtered_menu = filtered_menu[filtered_menu["Meal"].isin(vegetarian_meals)]
+
+    return filtered_menu
 
 # Updated Bentley Dining Hall Data with additional nutrients
 dining_hall_data = {
@@ -165,37 +185,37 @@ dining_hall_data = {
         {"Meal": "Scrambled Tofu", "Calories": 60, "Total Fat (g)": 3, "Protein (g)": 6, "Carbs (g)": 2, "Fiber (g)": 1},
         {"Meal": "Classic Grits", "Calories": 100, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 1},
     ]),
-    "Lunch": pd.DataFrame([
-    {"Meal": "Balsamic Collard Greens", "Calories": 330, "Total Fat (g)": 5, "Protein (g)": 6, "Carbs (g)": 20, "Fiber (g)": 8},
-    {"Meal": "Turkish Bulgur Pilaf With Garbanzo Beans", "Calories": 510, "Total Fat (g)": 8, "Protein (g)": 18, "Carbs (g)": 80, "Fiber (g)": 12},
-    {"Meal": "Grilled Steak", "Calories": 260, "Total Fat (g)": 15, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
-    {"Meal": "Jasmine Rice", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 0},
-    {"Meal": "Simply Smashed Yukon Gold Potatoes", "Calories": 110, "Total Fat (g)": 3, "Protein (g)": 2, "Carbs (g)": 20, "Fiber (g)": 2},
-    {"Meal": "Caribbean Style Ratatouille", "Calories": 80, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 12, "Fiber (g)": 3},
-    {"Meal": "Steamed Broccoli", "Calories": 10, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 2, "Fiber (g)": 1},
-    {"Meal": "Sticky Rice", "Calories": 210, "Total Fat (g)": 0, "Protein (g)": 3, "Carbs (g)": 46, "Fiber (g)": 1},
-    {"Meal": "Warm Pita Bread", "Calories": 190, "Total Fat (g)": 4, "Protein (g)": 6, "Carbs (g)": 34, "Fiber (g)": 2},
-    {"Meal": "Pork Souvlaki Bowl", "Calories": 580, "Total Fat (g)": 22, "Protein (g)": 40, "Carbs (g)": 48, "Fiber (g)": 4},
-    {"Meal": "Greek Salad", "Calories": 20, "Total Fat (g)": 1, "Protein (g)": 1, "Carbs (g)": 3, "Fiber (g)": 1},
-    {"Meal": "Tomato, Mozzarella & Pesto Panini", "Calories": 550, "Total Fat (g)": 25, "Protein (g)": 20, "Carbs (g)": 60, "Fiber (g)": 4},
-    {"Meal": "Cheeseburger On Bun", "Calories": 200, "Total Fat (g)": 8, "Protein (g)": 12, "Carbs (g)": 25, "Fiber (g)": 1},
-    {"Meal": "French Fries", "Calories": 150, "Total Fat (g)": 5, "Protein (g)": 2, "Carbs (g)": 24, "Fiber (g)": 2},
-    {"Meal": "Grilled Garlic Chicken", "Calories": 150, "Total Fat (g)": 2, "Protein (g)": 30, "Carbs (g)": 0, "Fiber (g)": 0},
-    ]),
-    "Dinner": pd.DataFrame([
-    {"Meal": "Steamed Broccoli", "Calories": 10, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 2, "Fiber (g)": 1},
-    {"Meal": "Sticky Rice", "Calories": 160, "Total Fat (g)": 0, "Protein (g)": 3, "Carbs (g)": 37, "Fiber (g)": 1},
-    {"Meal": "Herb Roast Chicken Breast", "Calories": 130, "Total Fat (g)": 3, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
-    {"Meal": "Turkish Bulgur Pilaf With Garbanzo Beans", "Calories": 510, "Total Fat (g)": 8, "Protein (g)": 18, "Carbs (g)": 80, "Fiber (g)": 12},
-    {"Meal": "Simply Smashed Yukon Gold Potatoes", "Calories": 110, "Total Fat (g)": 3, "Protein (g)": 2, "Carbs (g)": 20, "Fiber (g)": 2},
-    {"Meal": "Jasmine Rice", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 0},
-    {"Meal": "Balsamic Collard Greens", "Calories": 330, "Total Fat (g)": 5, "Protein (g)": 6, "Carbs (g)": 20, "Fiber (g)": 8},
-    {"Meal": "Caribbean Style Ratatouille", "Calories": 80, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 12, "Fiber (g)": 3},
-    {"Meal": "Curly Fries", "Calories": 290, "Total Fat (g)": 15, "Protein (g)": 4, "Carbs (g)": 35, "Fiber (g)": 3},
-    {"Meal": "Chicken Nuggets", "Calories": 350, "Total Fat (g)": 20, "Protein (g)": 15, "Carbs (g)": 22, "Fiber (g)": 2},
-    {"Meal": "Baked Macaroni & Cheese", "Calories": 180, "Total Fat (g)": 10, "Protein (g)": 6, "Carbs (g)": 20, "Fiber (g)": 1},
-    {"Meal": "Tomato, Mozzarella & Pesto Panini", "Calories": 550, "Total Fat (g)": 25, "Protein (g)": 20, "Carbs (g)": 60, "Fiber (g)": 4},
-    ]),
+        "Lunch": pd.DataFrame([
+        {"Meal": "Balsamic Collard Greens", "Calories": 330, "Total Fat (g)": 5, "Protein (g)": 6, "Carbs (g)": 20, "Fiber (g)": 8},
+        {"Meal": "Turkish Bulgur Pilaf With Garbanzo Beans", "Calories": 510, "Total Fat (g)": 8, "Protein (g)": 18, "Carbs (g)": 80, "Fiber (g)": 12},
+        {"Meal": "Grilled Steak", "Calories": 260, "Total Fat (g)": 15, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
+        {"Meal": "Jasmine Rice", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 0},
+        {"Meal": "Simply Smashed Yukon Gold Potatoes", "Calories": 110, "Total Fat (g)": 3, "Protein (g)": 2, "Carbs (g)": 20, "Fiber (g)": 2},
+        {"Meal": "Caribbean Style Ratatouille", "Calories": 80, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 12, "Fiber (g)": 3},
+        {"Meal": "Steamed Broccoli", "Calories": 10, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 2, "Fiber (g)": 1},
+        {"Meal": "Sticky Rice", "Calories": 210, "Total Fat (g)": 0, "Protein (g)": 3, "Carbs (g)": 46, "Fiber (g)": 1},
+        {"Meal": "Warm Pita Bread", "Calories": 190, "Total Fat (g)": 4, "Protein (g)": 6, "Carbs (g)": 34, "Fiber (g)": 2},
+        {"Meal": "Pork Souvlaki Bowl", "Calories": 580, "Total Fat (g)": 22, "Protein (g)": 40, "Carbs (g)": 48, "Fiber (g)": 4},
+        {"Meal": "Greek Salad", "Calories": 20, "Total Fat (g)": 1, "Protein (g)": 1, "Carbs (g)": 3, "Fiber (g)": 1},
+        {"Meal": "Tomato, Mozzarella & Pesto Panini", "Calories": 550, "Total Fat (g)": 25, "Protein (g)": 20, "Carbs (g)": 60, "Fiber (g)": 4},
+        {"Meal": "Cheeseburger On Bun", "Calories": 200, "Total Fat (g)": 8, "Protein (g)": 12, "Carbs (g)": 25, "Fiber (g)": 1},
+        {"Meal": "French Fries", "Calories": 150, "Total Fat (g)": 5, "Protein (g)": 2, "Carbs (g)": 24, "Fiber (g)": 2},
+        {"Meal": "Grilled Garlic Chicken", "Calories": 150, "Total Fat (g)": 2, "Protein (g)": 30, "Carbs (g)": 0, "Fiber (g)": 0},
+        ]),
+        "Dinner": pd.DataFrame([
+        {"Meal": "Steamed Broccoli", "Calories": 10, "Total Fat (g)": 0, "Protein (g)": 1, "Carbs (g)": 2, "Fiber (g)": 1},
+        {"Meal": "Sticky Rice", "Calories": 160, "Total Fat (g)": 0, "Protein (g)": 3, "Carbs (g)": 37, "Fiber (g)": 1},
+        {"Meal": "Herb Roast Chicken Breast", "Calories": 130, "Total Fat (g)": 3, "Protein (g)": 25, "Carbs (g)": 0, "Fiber (g)": 0},
+        {"Meal": "Turkish Bulgur Pilaf With Garbanzo Beans", "Calories": 510, "Total Fat (g)": 8, "Protein (g)": 18, "Carbs (g)": 80, "Fiber (g)": 12},
+        {"Meal": "Simply Smashed Yukon Gold Potatoes", "Calories": 110, "Total Fat (g)": 3, "Protein (g)": 2, "Carbs (g)": 20, "Fiber (g)": 2},
+        {"Meal": "Jasmine Rice", "Calories": 100, "Total Fat (g)": 0, "Protein (g)": 2, "Carbs (g)": 22, "Fiber (g)": 0},
+        {"Meal": "Balsamic Collard Greens", "Calories": 330, "Total Fat (g)": 5, "Protein (g)": 6, "Carbs (g)": 20, "Fiber (g)": 8},
+        {"Meal": "Caribbean Style Ratatouille", "Calories": 80, "Total Fat (g)": 1, "Protein (g)": 2, "Carbs (g)": 12, "Fiber (g)": 3},
+        {"Meal": "Curly Fries", "Calories": 290, "Total Fat (g)": 15, "Protein (g)": 4, "Carbs (g)": 35, "Fiber (g)": 3},
+        {"Meal": "Chicken Nuggets", "Calories": 350, "Total Fat (g)": 20, "Protein (g)": 15, "Carbs (g)": 22, "Fiber (g)": 2},
+        {"Meal": "Baked Macaroni & Cheese", "Calories": 180, "Total Fat (g)": 10, "Protein (g)": 6, "Carbs (g)": 20, "Fiber (g)": 1},
+        {"Meal": "Tomato, Mozzarella & Pesto Panini", "Calories": 550, "Total Fat (g)": 25, "Protein (g)": 20, "Carbs (g)": 60, "Fiber (g)": 4},
+        ]),
   },
 }
 
@@ -298,3 +318,5 @@ if selected_meals:
     
         if submitted:
             st.success(f"Thank you, {name}! Your request has been submitted. Hayley Ruff will reach out to you at {email} soon.")
+
+
