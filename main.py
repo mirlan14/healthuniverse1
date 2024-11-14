@@ -39,7 +39,7 @@ def filter_meals(menu, preferences, max_calories, max_fat):
     return filtered_menu
 
 # Updated Bentley Dining Hall Data with additional nutrients
-dining_hall_data = {
+menu = {
   "Monday": {
     "Breakfast": pd.DataFrame([
         {"Meal": "Bacon, Egg And Cheese Muffin", "Calories": 350, "Total Fat (g)": 12, "Protein (g)": 15, "Carbs (g)": 30, "Fiber (g)": 2},
@@ -244,11 +244,11 @@ st.sidebar.metric("Recommended Daily Calories", f"{daily_caloric_needs} kcal")
 
 # Sidebar for day and meal type selection
 st.sidebar.header("Select Day and Meal Type")
-selected_day = st.sidebar.selectbox("Select a Day:", list(dining_hall_data.keys()))
+selected_day = st.sidebar.selectbox("Select a Day:", list(menu.keys()))
 selected_meal_type = st.sidebar.selectbox("Select a Meal Type:", ["Breakfast", "Lunch", "Dinner"])
 
 # Retrieve menu for selected day and meal type
-menu_df = dining_hall_data[selected_day][selected_meal_type]
+menu_df = menu[selected_day][selected_meal_type]
 st.subheader(f"{selected_day} {selected_meal_type} Menu")
 st.dataframe(menu_df)
 
