@@ -3,10 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-image_path = "nurtfiy logo.png"
-image = Image.open(image_path)
-
-st.image(image, caption="Nutrify Logo", use_column_width=True)
+# Display the Nutrify logo at the top of the app
+st.image("images/nurtfiy logo.png", caption="Nutrify", width=300)
 
 # Pie chart
 def plot_pie_chart(data, labels, title):
