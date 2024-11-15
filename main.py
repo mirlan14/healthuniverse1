@@ -339,7 +339,7 @@ if selected_meals:
     # Generate recommendations based on totals
     if totals["Protein (g)"] < protein_grams_needed / 3:
         recommendations.append(
-            f"Your meal is still too low in protein ({totals['Protein (g)']} g). You need approximately round({protein_grams_needed / 3}) g. "
+            f"Your meal is still too low in protein ({totals['Protein (g)']} g). You need approximately {round(protein_grams_needed / 3)}g. "
             "Consider adding options like 'Grilled Garlic Chicken', 'Black Bean Burger', or 'Scrambled Eggs'."
         )
     else:
@@ -347,7 +347,7 @@ if selected_meals:
         
     if totals["Carbs (g)"] < carbs_grams_needed / 3 :
         recommendations.append(
-            f"Your meal is still low in carbohydrates ({totals['Carbs (g)']} g). You need approximately round({carbs_grams_needed / 3}) g. "
+            f"Your meal is still low in carbohydrates ({totals['Carbs (g)']} g). You need approximately {round(carbs_grams_needed / 3)} g. "
             "Consider adding options like 'Jasmine Rice', 'Oatmeal', or 'Brown Rice'."
         )
     else:
@@ -355,7 +355,7 @@ if selected_meals:
         
     if totals["Fat (g)"] < fat_grams_needed / 3 :
         recommendations.append(
-            f"Your meal is still low in fats ({totals['Fat (g)']} g). You need approximately round({fat_grams_needed / 3}) g. "
+            f"Your meal is still low in fats ({totals['Fat (g)']} g). You need approximately {round(fat_grams_needed / 3}) g. "
             "Consider adding options like 'Bacon Slices', 'Scrambled Tofu', or 'Avocado'."
         )
     else:
