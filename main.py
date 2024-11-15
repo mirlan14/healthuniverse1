@@ -352,7 +352,7 @@ if selected_meals:
             f"Your meal is still low in fats ({totals['Total Fat (g)']} g). You need approximately {fat_grams_needed} g. "
             "Consider adding options like 'Bacon Slices', 'Scrambled Tofu', or 'Avocado'."
         )
-     else:
+    else:
         st.success("Your meal meets your fat needs! ")
          
     # Display Recommendations
