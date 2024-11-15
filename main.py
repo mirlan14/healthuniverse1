@@ -2,24 +2,19 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+from math import pi
 
-# Pie Chart
-def plot_pie_chart(data, labels, title):
-    fig, ax = plt.subplots()
-    explode = [0.1 if val == max(data) else 0 for val in data]  # Explode the largest slice
-    ax.pie(data, labels=labels, autopct='%1.1f%%', explode=explode, startangle=140)
-    ax.set_title(title)
-    return fig
-
-# Stacked Bar Chart
-def plot_stacked_bar_chart(data, labels, title):
-    fig, ax = plt.subplots()
-    ax.bar(labels, data["Calories"], label="Calories", color="red")
-    ax.bar(labels, data["Protein (g)"], bottom=data["Calories"], label="Protein (g)", color="blue")
-    ax.bar(labels, data["Carbs (g)"], bottom=data["Calories"] + data["Protein (g)"], label="Carbs (g)", color="green")
-    ax.set_title(title)
-    ax.legend()
-    plt.xticks(rotation=45, ha="right")
+def plot_radar_chart(data, categories, title):
+    fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
+    num_vars = len(categories)
+    angles = [n / float(num_vars) * 2 * pi for n in range(num_vars)]
+    angles += angles[:1]  # Complete the loop
+    data += data[:1]  # Ensure data closes the loop
+    ax.plot(angles, data, linewidth=1, linestyle='solid')
+    ax.fill(angles, data, alpha=0.25)
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(categories)
+    ax.set_title(title, size=15)
     return fig
 
 # Function to calculate totals based on portions
