@@ -355,7 +355,7 @@ if selected_meals:
         
     if totals["Fat (g)"] < fat_grams_needed / 3 :
         recommendations.append(
-            f"Your meal is still low in fats ({totals['Fat (g)']} g). You need approximately {round(fat_grams_needed / 3}) g. "
+            f"Your meal is still low in fats ({totals['Fat (g)']} g). You need approximately {round(fat_grams_needed / 3)} g. "
             "Consider adding options like 'Bacon Slices', 'Scrambled Tofu', or 'Avocado'."
         )
     else:
