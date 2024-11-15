@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 # Display the Nutrify logo at the top of the app
-st.image("images/nurtfiy logo.png", caption="Nutrify", width=300)
+st.image("images/nurtfiy logo.png", width=300)
 
 # Pie chart
 def plot_pie_chart(data, labels, title):
