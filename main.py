@@ -333,29 +333,36 @@ if selected_meals:
     # Generate recommendations based on totals
     if totals["Protein (g)"] < protein_grams_needed / 3:
         recommendations.append(
-            f"Your meal is too low in protein ({totals['Protein (g)']} g). You need approximately {protein_grams_needed} g. "
+            f"Your meal is still too low in protein ({totals['Protein (g)']} g). You need approximately {protein_grams_needed} g. "
             "Consider adding options like 'Grilled Garlic Chicken', 'Black Bean Burger', or 'Scrambled Eggs'."
         )
-
+    else:
+        st.success("Your meal plan meets your protein needs!")
+        
     if totals["Carbs (g)"] < carbs_grams_needed / 3 :
         recommendations.append(
-            f"Your meal is too low in carbohydrates ({totals['Carbs (g)']} g). You need approximately {carbs_grams_needed} g. "
+            f"Your meal is still low in carbohydrates ({totals['Carbs (g)']} g). You need approximately {carbs_grams_needed} g. "
             "Consider adding options like 'Jasmine Rice', 'Oatmeal', or 'Brown Rice'."
         )
-
+    else:
+        st.success("Your meal plan meets your carbohydrates needs!")
+        
     if totals["Total Fat (g)"] < fat_grams_needed / 3 :
         recommendations.append(
-            f"Your meal is too low in fats ({totals['Total Fat (g)']} g). You need approximately {fat_grams_needed} g. "
+            f"Your meal is still low in fats ({totals['Total Fat (g)']} g). You need approximately {fat_grams_needed} g. "
             "Consider adding options like 'Bacon Slices', 'Scrambled Tofu', or 'Avocado'."
         )
-
+     else:
+        st.success("Your meal meets your fat needs! ")
+         
     # Display Recommendations
     if recommendations:
         st.subheader("Recommendations for a Balanced Meal")
         for recommendation in recommendations:
             st.warning(recommendation)
     else:
-        st.success("Your meal plan meets your macronutrient needs. Great job!")
+        st.success("Your meal plan meets all your macronutrient needs. Great job!")
+
     # Dietitian Section
     st.markdown("---")
     st.header("Need Help with Your Diet?")
