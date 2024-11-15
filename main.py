@@ -1,31 +1,16 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-from math import pi
+from datetime import datetime
 
-# Function to create a pie chart
+# Pie chart
 def plot_pie_chart(data, labels, title):
     fig, ax = plt.subplots()
-    explode = [0.1 if val == max(data) else 0 for val in data]  # Explode the largest slice
-    ax.pie(data, labels=labels, autopct='%1.1f%%', explode=explode, startangle=140)
+    ax.pie(data, labels=labels, autopct='%1.1f%%', startangle=140)
     ax.set_title(title)
     return fig
 
-# Function to create a radar chart
-def plot_radar_chart(data, categories, title):
-    fig, ax = plt.subplots(subplot_kw={"projection": "polar"})
-    num_vars = len(categories)
-    angles = [n / float(num_vars) * 2 * pi for n in range(num_vars)]
-    angles += angles[:1]  # Complete the loop
-    data += data[:1]  # Ensure data closes the loop
-    ax.plot(angles, data, linewidth=1, linestyle='solid')
-    ax.fill(angles, data, alpha=0.25)
-    ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(categories)
-    ax.set_title(title, size=15)
-    return fig
-
-# Function to calculate totals based on portions
+# Calculate totals based on portions
 def calculate_totals(selected_data, portions):
     selected_data = selected_data.copy()
     selected_data["Portions"] = portions
@@ -33,30 +18,7 @@ def calculate_totals(selected_data, portions):
         selected_data[column] *= selected_data["Portions"]
     return selected_data, selected_data[["Calories", "Total Fat (g)", "Protein (g)", "Carbs (g)", "Fiber (g)"]].sum()
 
-# Sidebar for user personal info
-st.sidebar.header("Personal Information")
-weight = st.sidebar.number_input("Weight (kg):", min_value=30, max_value=200, value=70)
-height = st.sidebar.number_input("Height (cm):", min_value=100, max_value=250, value=170)
-age = st.sidebar.number_input("Age (years):", min_value=10, max_value=100, value=25)
-gender = st.sidebar.selectbox("Gender:", ["Male", "Female", "Other"])
-activity_level = st.sidebar.selectbox("Activity Level:", ["Sedentary", "Lightly Active", "Moderately Active", "Very Active"])
-
-# Calculate daily caloric needs
-if gender == "Male":
-    bmr = 10 * weight + 6.25 * height - 5 * age + 5
-else:
-    bmr = 10 * weight + 6.25 * height - 5 * age - 161
-
-activity_multiplier = {
-    "Sedentary": 1.2,
-    "Lightly Active": 1.375,
-    "Moderately Active": 1.55,
-    "Very Active": 1.725,
-}
-daily_caloric_needs = int(bmr * activity_multiplier[activity_level])
-st.sidebar.metric("Recommended Daily Calories", f"{daily_caloric_needs} kcal")
-
-# Sidebar for day and meal type selection
+# Sodexo Data for Bentley Dining Hall
 dining_hall_data = {
   "Monday": {
     "Breakfast": pd.DataFrame([
@@ -236,6 +198,32 @@ dining_hall_data = {
     ]),
   },
 }
+
+# Sidebar for user personal info
+st.sidebar.header("Personal Information")
+weight = st.sidebar.number_input("Weight (kg):", min_value=30, max_value=200, value=70)
+height = st.sidebar.number_input("Height (cm):", min_value=100, max_value=250, value=170)
+age = st.sidebar.number_input("Age (years):", min_value=10, max_value=100, value=25)
+gender = st.sidebar.selectbox("Gender:", ["Male", "Female", "Other"])
+activity_level = st.sidebar.selectbox("Activity Level:", ["Sedentary", "Lightly Active", "Moderately Active", "Very Active"])
+
+# Calculate daily caloric needs
+if gender == "Male":
+    bmr = 10 * weight + 6.25 * height - 5 * age + 5
+else:
+    bmr = 10 * weight + 6.25 * height - 5 * age - 161
+
+activity_multiplier = {
+    "Sedentary": 1.2,
+    "Lightly Active": 1.375,
+    "Moderately Active": 1.55,
+    "Very Active": 1.725,
+}
+daily_caloric_needs = int(bmr * activity_multiplier[activity_level])
+st.sidebar.metric("Recommended Daily Calories", f"{daily_caloric_needs} kcal")
+
+# Sidebar for day and meal type selection
+st.sidebar.header("Select Day and Meal Type")
 selected_day = st.sidebar.selectbox("Select a Day:", list(dining_hall_data.keys()))
 selected_meal_type = st.sidebar.selectbox("Select a Meal Type:", ["Breakfast", "Lunch", "Dinner"])
 
@@ -274,27 +262,39 @@ if selected_meals:
     st.metric("Total Fiber", f"{totals['Fiber (g)']} g")
 
     # Nutritional Breakdown Pie Chart
-    st.subheader("Nutritional Breakdown (Pie Chart)")
+    st.subheader("Nutritional Breakdown")
     pie_chart = plot_pie_chart(
-        data=[totals["Carbs (g)"], totals["Protein (g)"], totals["Total Fat (g)"]],
-        labels=["Carbs (g)", "Protein (g)", "Total Fat (g)"],
-        title="Nutritional Distribution"
-    )
+    data=[totals["Carbs (g)"], totals["Protein (g)"], totals["Total Fat (g)"]],
+    labels=["Carbs (g)", "Protein (g)", "Total Fat (g)"],
+    title="Nutritional Distribution")
     st.pyplot(pie_chart)
-
-    # Nutritional Profile Radar Chart
-    st.subheader("Nutritional Profile (Radar Chart)")
-    radar_chart = plot_radar_chart(
-        data=[totals["Calories"], totals["Total Fat (g)"], totals["Protein (g)"], totals["Carbs (g)"], totals["Fiber (g)"]],
-        categories=["Calories", "Total Fat (g)", "Protein (g)", "Carbs (g)", "Fiber (g)"],
-        title="Nutritional Radar"
-    )
-    st.pyplot(radar_chart)
 
     # Recommendations
     if totals["Calories"] > daily_caloric_needs:
-        st.error("Your meal plan exceeds your daily caloric needs. Consider reducing high-calorie items.")
+        st.error("Yourr meal plan exceeds your daily caloric needs. Consider reducing high-calorie items.")
     elif totals["Calories"] < daily_caloric_needs * 0.8:
         st.warning("Your meal plan is too low in calories. Consider adding more nutrient-dense meals.")
     else:
         st.success("Your meal plan is within your recommended caloric range. Keep it up!")
+    
+    # Dietitian Section
+    st.markdown("---")
+    st.header("Need Help with Your Diet?")
+    st.write("If you have questions or concerns about your diet, you can book an appointment with our on-site campus dietitian.")
+    
+    # Display dietitian information
+    st.image("images/Hayley_tcm17-45509.jpg", caption="Hayley Ruff RD, LDN", width=300)
+    st.write("**Dietitian: Hayley Ruff RD, LDN**")
+    st.write("📧 **Email:** [hayley.ruff@sodexo.com](mailto:hayley.ruff@sodexo.com)")
+    st.write("📞 **Phone:** +1 (508) 414-9633")
+    
+    # Appointment Booking Form
+    st.subheader("Book an Appointment")
+    with st.form("dietitian_appointment_form"):
+        name = st.text_input("Your Name")
+        email = st.text_input("Your Email")
+        message = st.text_area("What would you like to discuss?")
+        submitted = st.form_submit_button("Submit Appointment Request")
+    
+        if submitted:
+            st.success(f"Thank you, {name}! Your request has been submitted. Hayley Ruff will reach out to you at {email} soon.")
