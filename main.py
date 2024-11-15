@@ -317,14 +317,54 @@ if selected_meals:
     title="Nutritional Distribution")
     st.pyplot(pie_chart)
 
-    # Recommendations
+# Nutritional Recommendations Section
+if selected_meals:
+    # Recommendations based on deficiencies
+    recommendations = []
+
+    if totals["Protein (g)"] < 50:  # Example threshold for protein
+        recommendations.append(
+            "Your meal is too low in protein. Consider adding options like 'Grilled Garlic Chicken', 'Black Bean Burger', or 'Scrambled Eggs'."
+        )
+
+    if totals["Carbs (g)"] < 130:  # Example threshold for carbohydrates
+        recommendations.append(
+            "Your meal is too low in carbohydrates. Consider adding options like 'Jasmine Rice', 'Oatmeal', or 'Brown Rice'."
+        )
+
+    if totals["Total Fat (g)"] < 20:  # Example threshold for fats
+        recommendations.append(
+            "Your meal is too low in fats. Consider adding options like 'Bacon Slices', 'Scrambled Tofu', or 'Avocado'."
+        )
+
+    # Display recommendations
+    if recommendations:
+        st.subheader("Recommendations for a Balanced Meal")
+        for recommendation in recommendations:
+            st.warning(recommendation)
+    else:
+        st.success("Your meal plan is well-balanced. Keep up the good work!")
+
+# Recommendations based on specific meals
+# Display recommendations in real-time
+if selected_meals:
+    for meal in selected_meals:
+        if "Oatmeal" in meal and totals["Protein (g)"] < 50:
+            st.info("Consider switching 'Oatmeal' to 'Grilled Garlic Chicken' or 'Scrambled Eggs' for a higher protein intake.")
+        if "Brown Rice" in meal and totals["Carbs (g)"] < 130:
+            st.info("Consider adding 'Jasmine Rice' or 'Oatmeal' to increase carbohydrate intake.")
+        if "Bacon Slices" in meal and totals["Total Fat (g)"] < 20:
+            st.info("Consider switching 'Bacon Slices' to 'Scrambled Tofu' for a more balanced fat intake.")
+
+    # Highlight if the meal meets overall recommendations
+    st.markdown("---")
     if totals["Calories"] > daily_caloric_needs:
-        st.error("Yourr meal plan exceeds your daily caloric needs. Consider reducing high-calorie items.")
+        st.error("Your meal plan exceeds your daily caloric needs. Consider reducing high-calorie items.")
     elif totals["Calories"] < daily_caloric_needs * 0.8:
         st.warning("Your meal plan is too low in calories. Consider adding more nutrient-dense meals.")
     else:
         st.success("Your meal plan is within your recommended caloric range. Keep it up!")
-    
+
     # Dietitian Section
     st.markdown("---")
     st.header("Need Help with Your Diet?")
