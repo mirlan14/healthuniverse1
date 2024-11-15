@@ -280,6 +280,8 @@ selected_restriction = st.sidebar.selectbox("Select Dietary Restriction:", ["All
 
 # Retrieve menu for selected day and meal type
 menu_df = dining_hall_data[selected_day][selected_meal_type]
+st.subheader(f"{selected_day} {selected_meal_type} {selected_restrictions} Menu")
+st.dataframe(menu_df)
 
 # Apply dietary restriction filter in-place if a restriction is selected
 if selected_restriction != "All":
