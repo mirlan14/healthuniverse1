@@ -3,11 +3,23 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-# Function to create a pie chart
+# Pie Chart
 def plot_pie_chart(data, labels, title):
     fig, ax = plt.subplots()
-    ax.pie(data, labels=labels, autopct='%1.1f%%', startangle=140)
+    explode = [0.1 if val == max(data) else 0 for val in data]  # Explode the largest slice
+    ax.pie(data, labels=labels, autopct='%1.1f%%', explode=explode, startangle=140)
     ax.set_title(title)
+    return fig
+
+# Stacked Bar Chart
+def plot_stacked_bar_chart(data, labels, title):
+    fig, ax = plt.subplots()
+    ax.bar(labels, data["Calories"], label="Calories", color="red")
+    ax.bar(labels, data["Protein (g)"], bottom=data["Calories"], label="Protein (g)", color="blue")
+    ax.bar(labels, data["Carbs (g)"], bottom=data["Calories"] + data["Protein (g)"], label="Carbs (g)", color="green")
+    ax.set_title(title)
+    ax.legend()
+    plt.xticks(rotation=45, ha="right")
     return fig
 
 # Function to calculate totals based on portions
