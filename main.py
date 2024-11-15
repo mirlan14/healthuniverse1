@@ -19,8 +19,7 @@ def calculate_totals(selected_data, portions):
     return selected_data, selected_data[["Calories", "Total Fat (g)", "Protein (g)", "Carbs (g)", "Fiber (g)"]].sum()
 
 # Sodexo Data for Bentley Dining Hall
-dining_hall_data = 
-{
+dining_hall_data = {
   "Monday": {
     "Breakfast": pd.DataFrame([
         {"Meal": "Bacon, Egg And Cheese Muffin", "Calories": 350, "Total Fat (g)": 12, "Protein (g)": 15, "Carbs (g)": 30, "Fiber (g)": 2},
