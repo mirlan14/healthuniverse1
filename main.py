@@ -286,6 +286,7 @@ selected_meals = st.multiselect(
     options=menu_df["Meal"].tolist()
 )
 
+# After meals are selected and totals are calculated
 if selected_meals:
     selected_data = menu_df[menu_df["Meal"].isin(selected_meals)]
     st.write("### Selected Meals")
@@ -312,67 +313,49 @@ if selected_meals:
     # Nutritional Breakdown Pie Chart
     st.subheader("Nutritional Breakdown")
     pie_chart = plot_pie_chart(
-    data=[totals["Carbs (g)"], totals["Protein (g)"], totals["Total Fat (g)"]],
-    labels=["Carbs (g)", "Protein (g)", "Total Fat (g)"],
-    title="Nutritional Distribution")
+        data=[totals["Carbs (g)"], totals["Protein (g)"], totals["Total Fat (g)"]],
+        labels=["Carbs (g)", "Protein (g)", "Total Fat (g)"],
+        title="Nutritional Distribution"
+    )
     st.pyplot(pie_chart)
 
-# Calculate macronutrient needs based on personal info
-protein_grams_needed = round(weight * 1.0)  # Protein in grams (moderate activity)
-fat_calories_needed = daily_caloric_needs * 0.25  # 25% of total calories
-fat_grams_needed = round(fat_calories_needed / 9)  # Convert fat kcal to grams
-protein_calories_needed = protein_grams_needed * 4  # Protein kcal
-carbs_calories_needed = daily_caloric_needs - (protein_calories_needed + fat_calories_needed)
-carbs_grams_needed = round(carbs_calories_needed / 4)  # Convert carbs kcal to grams
+    # Recommendations Section
+    recommendations = []
 
-# Adjust recommendations dynamically
-if totals["Protein (g)"] < protein_grams_needed:
-    recommendations.append(
-        f"Your meal is too low in protein ({totals['Protein (g)']} g). You need approximately {protein_grams_needed} g. "
-        "Consider adding options like 'Grilled Garlic Chicken', 'Black Bean Burger', or 'Scrambled Eggs'."
-    )
+    # Macronutrient Needs Calculations
+    protein_grams_needed = round(weight * 1.0)
+    fat_calories_needed = daily_caloric_needs * 0.25
+    fat_grams_needed = round(fat_calories_needed / 9)
+    protein_calories_needed = protein_grams_needed * 4
+    carbs_calories_needed = daily_caloric_needs - (protein_calories_needed + fat_calories_needed)
+    carbs_grams_needed = round(carbs_calories_needed / 4)
 
-if totals["Carbs (g)"] < carbs_grams_needed:
-    recommendations.append(
-        f"Your meal is too low in carbohydrates ({totals['Carbs (g)']} g). You need approximately {carbs_grams_needed} g. "
-        "Consider adding options like 'Jasmine Rice', 'Oatmeal', or 'Brown Rice'."
-    )
+    # Generate recommendations based on totals
+    if totals["Protein (g)"] < protein_grams_needed:
+        recommendations.append(
+            f"Your meal is too low in protein ({totals['Protein (g)']} g). You need approximately {protein_grams_needed} g. "
+            "Consider adding options like 'Grilled Garlic Chicken', 'Black Bean Burger', or 'Scrambled Eggs'."
+        )
 
-if totals["Total Fat (g)"] < fat_grams_needed:
-    recommendations.append(
-        f"Your meal is too low in fats ({totals['Total Fat (g)']} g). You need approximately {fat_grams_needed} g. "
-        "Consider adding options like 'Bacon Slices', 'Scrambled Tofu', or 'Avocado'."
-    )
+    if totals["Carbs (g)"] < carbs_grams_needed:
+        recommendations.append(
+            f"Your meal is too low in carbohydrates ({totals['Carbs (g)']} g). You need approximately {carbs_grams_needed} g. "
+            "Consider adding options like 'Jasmine Rice', 'Oatmeal', or 'Brown Rice'."
+        )
 
-# Display recommendations
-if recommendations:
-    st.subheader("Recommendations for a Balanced Meal")
-    for recommendation in recommendations:
-        st.warning(recommendation)
-else:
-    st.success("Your meal plan meets your macronutrient needs. Great job!")
+    if totals["Total Fat (g)"] < fat_grams_needed:
+        recommendations.append(
+            f"Your meal is too low in fats ({totals['Total Fat (g)']} g). You need approximately {fat_grams_needed} g. "
+            "Consider adding options like 'Bacon Slices', 'Scrambled Tofu', or 'Avocado'."
+        )
 
-
-# Recommendations based on specific meals
-# Display recommendations in real-time
-if selected_meals:
-    for meal in selected_meals:
-        if "Oatmeal" in meal and totals["Protein (g)"] < 50:
-            st.info("Consider switching 'Oatmeal' to 'Grilled Garlic Chicken' or 'Scrambled Eggs' for a higher protein intake.")
-        if "Brown Rice" in meal and totals["Carbs (g)"] < 130:
-            st.info("Consider adding 'Jasmine Rice' or 'Oatmeal' to increase carbohydrate intake.")
-        if "Bacon Slices" in meal and totals["Total Fat (g)"] < 20:
-            st.info("Consider switching 'Bacon Slices' to 'Scrambled Tofu' for a more balanced fat intake.")
-
-    # Highlight if the meal meets overall recommendations
-    st.markdown("---")
-    if totals["Calories"] > daily_caloric_needs:
-        st.error("Your meal plan exceeds your daily caloric needs. Consider reducing high-calorie items.")
-    elif totals["Calories"] < daily_caloric_needs * 0.8:
-        st.warning("Your meal plan is too low in calories. Consider adding more nutrient-dense meals.")
+    # Display Recommendations
+    if recommendations:
+        st.subheader("Recommendations for a Balanced Meal")
+        for recommendation in recommendations:
+            st.warning(recommendation)
     else:
-        st.success("Your meal plan is within your recommended caloric range. Keep it up!")
-
+        st.success("Your meal plan meets your macronutrient needs. Great job!")
     # Dietitian Section
     st.markdown("---")
     st.header("Need Help with Your Diet?")
