@@ -331,19 +331,19 @@ if selected_meals:
     carbs_grams_needed = round(carbs_calories_needed / 4)
 
     # Generate recommendations based on totals
-    if totals["Protein (g)"] < protein_grams_needed:
+    if totals["Protein (g)"] < protein_grams_needed / 3:
         recommendations.append(
             f"Your meal is too low in protein ({totals['Protein (g)']} g). You need approximately {protein_grams_needed} g. "
             "Consider adding options like 'Grilled Garlic Chicken', 'Black Bean Burger', or 'Scrambled Eggs'."
         )
 
-    if totals["Carbs (g)"] < carbs_grams_needed:
+    if totals["Carbs (g)"] < carbs_grams_needed / 3 :
         recommendations.append(
             f"Your meal is too low in carbohydrates ({totals['Carbs (g)']} g). You need approximately {carbs_grams_needed} g. "
             "Consider adding options like 'Jasmine Rice', 'Oatmeal', or 'Brown Rice'."
         )
 
-    if totals["Total Fat (g)"] < fat_grams_needed:
+    if totals["Total Fat (g)"] < fat_grams_needed / 3 :
         recommendations.append(
             f"Your meal is too low in fats ({totals['Total Fat (g)']} g). You need approximately {fat_grams_needed} g. "
             "Consider adding options like 'Bacon Slices', 'Scrambled Tofu', or 'Avocado'."
